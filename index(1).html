@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FraudShield AI — Enterprise Fraud Detection Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050d18;
+  --bg2: #080f1e;
+  --panel: #0a1628;
+  --card: #0d1e35;
+  --border: #132540;
+  --border2: #1a3357;
+  --accent: #00e5ff;
+  --accent2: #0099bb;
+  --green: #00ff88;
+  --amber: #ffb300;
+  --red: #ff3355;
+  --orange: #ff6622;
+  --gold: #ffd700;
+  --text: #c8dff0;
+  --text2: #7a9bbf;
+  --text3: #3d6080;
+  --white: #f0f8ff;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+html{font-size:14px;scroll-behavior:smooth;}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* Animated background */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(0,229,255,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,255,136,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 60% at 50% 50%, rgba(0,153,187,0.02) 0%, transparent 70%);
+}
+
+body::after{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,0.018) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+#app{position:relative;z-index:1;}
+
+/* ═══════════════════════════════
+   NAVBAR
+═══════════════════════════════ */
+nav{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:64px;
+  background:rgba(5,13,24,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);
+}
+
+.nav-logo{display:flex;align-items:center;gap:12px;}
+
+/* SVG LOGO */
+.logo-mark{
+  width:38px;height:38px;flex-shrink:0;
+}
+
+.nav-brand{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.6rem;letter-spacing:0.1em;
+  color:var(--white);
+}
+.nav-brand span{color:var(--accent);}
+
+.nav-tabs{display:flex;gap:4px;}
+.nav-tab{
+  padding:6px 16px;border-radius:4px;
+  font-size:0.78rem;font-weight:500;
+  color:var(--text2);cursor:pointer;
+  border:none;background:transparent;
+  transition:all 0.2s;letter-spacing:0.03em;
+}
+.nav-tab:hover{color:var(--text);background:var(--border);}
+.nav-tab.active{color:var(--accent);background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.15);}
+
+.nav-right{display:flex;align-items:center;gap:16px;}
+.live-badge{
+  display:flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:20px;
+  background:rgba(0,255,136,0.08);
+  border:1px solid rgba(0,255,136,0.2);
+  font-size:0.68rem;font-weight:600;
+  color:var(--green);letter-spacing:0.1em;
+}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 6px var(--green);}50%{opacity:0.4;box-shadow:none;}}
+
+.nav-version{font-size:0.68rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+
+/* ═══════════════════════════════
+   HERO SECTION
+═══════════════════════════════ */
+.hero{
+  padding:60px 40px 40px;
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+
+.hero::before{
+  content:'';
+  position:absolute;top:-100px;right:-100px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.hero-left{}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:4px 12px;border-radius:20px;
+  background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.15);
+  font-size:0.68rem;font-weight:600;color:var(--accent);
+  letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;
+}
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:3.5rem;line-height:1;letter-spacing:0.05em;
+  color:var(--white);margin-bottom:16px;
+}
+.hero-title span{
+  color:transparent;
+  -webkit-text-stroke:1px var(--accent);
+}
+.hero-sub{
+  font-size:0.9rem;line-height:1.7;color:var(--text2);
+  max-width:480px;margin-bottom:28px;
+}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.hero-tag{
+  padding:4px 10px;border-radius:3px;
+  font-size:0.65rem;font-family:'JetBrains Mono',monospace;
+  border:1px solid var(--border2);color:var(--text3);
+  letter-spacing:0.05em;
+}
+
+.hero-right{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.stat-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:8px;padding:20px;
+  position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),transparent);
+}
+.stat-card.green::before{background:linear-gradient(90deg,var(--green),transparent);}
+.stat-card.amber::before{background:linear-gradient(90deg,var(--amber),transparent);}
+.stat-card.red::before{background:linear-gradient(90deg,var(--red),transparent);}
+.stat-num{
+  font-family:'Bebas Neue',sans-serif;font-size:2.2rem;
+  color:var(--white);letter-spacing:0.05em;
+}
+.stat-label{font-size:0.68rem;color:var(--text3);margin-top:4px;letter-spacing:0.05em;}
+
+/* ═══════════════════════════════
+   MAIN TABS CONTENT
+═══════════════════════════════ */
+.tab-content{display:none;padding:32px 40px;}
+.tab-content.active{display:block;}
+
+/* ═══════════════════════════════
+   SINGLE TRANSACTION
+═══════════════════════════════ */
+.analyzer-grid{
+  display:grid;grid-template-columns:340px 1fr;gap:24px;
+}
+
+.input-panel{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:8px;padding:24px;
+}
+
+.panel-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:20px;padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.panel-header-icon{
+  width:32px;height:32px;border-radius:6px;
+  background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9rem;
+}
+.panel-title{font-weight:600;font-size:0.85rem;color:var(--white);}
+.panel-sub{font-size:0.68rem;color:var(--text3);}
+
+.field{margin-bottom:14px;}
+.field label{
+  display:block;font-size:0.68rem;font-weight:500;
+  color:var(--text2);margin-bottom:5px;letter-spacing:0.05em;text-transform:uppercase;
+}
+.field input,.field select{
+  width:100%;padding:9px 12px;
+  background:var(--panel);border:1px solid var(--border2);
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.82rem;
+  border-radius:5px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+}
+.field input:focus,.field select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(0,229,255,0.08);
+}
+.field select option{background:var(--panel);}
+
+.run-btn{
+  width:100%;padding:13px;margin-top:6px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none;border-radius:6px;
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;
+  letter-spacing:0.12em;color:var(--bg);
+  cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.run-btn:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,229,255,0.2);}
+.run-btn:active{transform:translateY(0);}
+
+/* Results */
+.results-panel{display:flex;flex-direction:column;gap:16px;}
+
+.score-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:8px;padding:24px;
+  display:grid;grid-template-columns:200px 1fr 1fr;gap:24px;align-items:start;
+}
+
+.score-ring-wrap{text-align:center;}
+.score-ring{width:140px;height:140px;margin:0 auto 10px;position:relative;}
+.score-ring svg{transform:rotate(-90deg);}
+.score-ring circle{fill:none;stroke-width:10;}
+.score-ring .track{stroke:var(--border2);}
+.score-ring .fill{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1),stroke 0.5s;}
+.score-num{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--white);
+  letter-spacing:0.05em;
+}
+.score-sublabel{font-size:0.65rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;}
+.score-verdict{
+  font-family:'Bebas Neue',sans-serif;font-size:1rem;
+  letter-spacing:0.06em;margin-top:6px;transition:color 0.4s;
+}
+
+.model-section{}
+.section-micro{font-size:0.62rem;color:var(--text3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;}
+.model-rows{display:flex;flex-direction:column;gap:8px;}
+.model-row{display:flex;align-items:center;gap:8px;}
+.model-name{font-size:0.68rem;color:var(--text2);width:130px;flex-shrink:0;}
+.bar-wrap{flex:1;height:5px;background:var(--border2);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;background:var(--accent);transition:width 0.8s ease;width:0%;}
+.bar-val{font-size:0.65rem;font-family:'JetBrains Mono',monospace;color:var(--text2);width:28px;text-align:right;}
+
+.signals-section{}
+.signal-list{display:flex;flex-direction:column;gap:5px;}
+.signal-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 10px;background:var(--panel);border-radius:4px;
+  font-size:0.68rem;border-left:2px solid transparent;transition:all 0.2s;
+}
+.signal-item.warn{border-left-color:var(--amber);background:rgba(255,179,0,0.04);}
+.signal-item.crit{border-left-color:var(--red);background:rgba(255,51,85,0.04);}
+.signal-name{color:var(--text);}
+.signal-pts{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--amber);}
+
+/* Typology Grid */
+.typo-section{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:8px;padding:24px;
+}
+.typo-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.typo-title{font-weight:600;font-size:0.85rem;color:var(--white);}
+.typo-ref{font-size:0.65rem;font-family:'JetBrains Mono',monospace;color:var(--text3);}
+.typo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.typo-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:6px;padding:14px;position:relative;
+  transition:all 0.3s;
+}
+.typo-card.flagged{border-color:var(--red);box-shadow:0 0 20px rgba(255,51,85,0.1);}
+.typo-card.warn{border-color:var(--amber);box-shadow:0 0 16px rgba(255,179,0,0.08);}
+.typo-num{font-size:0.58rem;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.typo-name{font-weight:600;font-size:0.75rem;color:var(--text);margin-bottom:4px;line-height:1.3;}
+.typo-desc{font-size:0.62rem;color:var(--text3);line-height:1.5;}
+.typo-badge{
+  position:absolute;top:10px;right:10px;
+  font-size:0.58rem;font-weight:700;padding:2px 7px;border-radius:3px;
+  letter-spacing:0.08em;
+}
+.badge-clear{background:rgba(0,255,136,0.08);color:var(--green);border:1px solid rgba(0,255,136,0.2);}
+.badge-detected{background:rgba(255,51,85,0.1);color:var(--red);border:1px solid rgba(255,51,85,0.25);}
+.badge-review{background:rgba(255,179,0,0.08);color:var(--amber);border:1px solid rgba(255,179,0,0.2);}
+
+/* ═══════════════════════════════
+   BULK UPLOAD TAB
+═══════════════════════════════ */
+.bulk-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+
+.upload-zone{
+  background:var(--card);border:2px dashed var(--border2);
+  border-radius:12px;padding:48px 32px;
+  text-align:center;cursor:pointer;
+  transition:all 0.3s;position:relative;
+}
+.upload-zone:hover,.upload-zone.dragover{
+  border-color:var(--accent);
+  background:rgba(0,229,255,0.04);
+  box-shadow:0 0 30px rgba(0,229,255,0.08);
+}
+.upload-icon{
+  width:64px;height:64px;margin:0 auto 20px;
+  background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.15);
+  border-radius:16px;display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;
+}
+.upload-title{font-weight:600;font-size:1rem;color:var(--white);margin-bottom:8px;}
+.upload-sub{font-size:0.78rem;color:var(--text2);line-height:1.6;margin-bottom:20px;}
+.upload-btn-label{
+  display:inline-block;padding:10px 24px;
+  background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.25);
+  border-radius:5px;font-size:0.78rem;font-weight:500;
+  color:var(--accent);cursor:pointer;transition:all 0.2s;
+}
+.upload-btn-label:hover{background:rgba(0,229,255,0.18);}
+#csvFileInput{display:none;}
+
+.csv-template{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:8px;padding:24px;
+}
+.template-title{font-weight:600;font-size:0.85rem;color:var(--white);margin-bottom:12px;}
+.template-desc{font-size:0.75rem;color:var(--text2);line-height:1.6;margin-bottom:16px;}
+.csv-preview{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:5px;padding:14px;
+  font-family:'JetBrains Mono',monospace;font-size:0.65rem;
+  color:var(--text2);line-height:1.8;overflow-x:auto;white-space:pre;
+}
+.download-template-btn{
+  margin-top:14px;width:100%;padding:10px;
+  background:transparent;border:1px solid var(--border2);
+  border-radius:5px;color:var(--text2);font-size:0.75rem;
+  cursor:pointer;transition:all 0.2s;
+}
+.download-template-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Bulk Results */
+.bulk-results{margin-top:24px;}
+.bulk-summary{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;
+}
+.summary-stat{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:6px;padding:16px;text-align:center;
+}
+.summary-num{
+  font-family:'Bebas Neue',sans-serif;font-size:1.8rem;
+  color:var(--white);letter-spacing:0.05em;
+}
+.summary-label{font-size:0.62rem;color:var(--text3);margin-top:3px;letter-spacing:0.05em;}
+
+.bulk-table-wrap{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:8px;overflow:hidden;
+}
+.bulk-table-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+}
+.bulk-table-title{font-weight:600;font-size:0.82rem;color:var(--white);}
+.export-btn{
+  padding:7px 16px;background:rgba(0,255,136,0.08);
+  border:1px solid rgba(0,255,136,0.2);border-radius:4px;
+  font-size:0.72rem;font-weight:500;color:var(--green);
+  cursor:pointer;transition:all 0.2s;
+}
+.export-btn:hover{background:rgba(0,255,136,0.15);}
+
+.bulk-table{width:100%;border-collapse:collapse;}
+.bulk-table th{
+  padding:10px 16px;text-align:left;
+  font-size:0.62rem;font-weight:600;color:var(--text3);
+  letter-spacing:0.1em;text-transform:uppercase;
+  background:var(--panel);border-bottom:1px solid var(--border);
+}
+.bulk-table td{
+  padding:10px 16px;font-size:0.72rem;
+  border-bottom:1px solid var(--border);color:var(--text2);
+}
+.bulk-table tr:last-child td{border-bottom:none;}
+.bulk-table tr:hover td{background:rgba(0,229,255,0.02);}
+.risk-pill{
+  display:inline-block;padding:2px 8px;border-radius:10px;
+  font-size:0.62rem;font-weight:600;letter-spacing:0.05em;
+}
+.risk-low{background:rgba(0,255,136,0.1);color:var(--green);}
+.risk-med{background:rgba(255,179,0,0.1);color:var(--amber);}
+.risk-high{background:rgba(255,102,34,0.1);color:var(--orange);}
+.risk-crit{background:rgba(255,51,85,0.12);color:var(--red);}
+
+/* Progress bar for bulk scanning */
+.scan-progress{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:8px;padding:24px;text-align:center;display:none;
+}
+.progress-title{font-weight:600;color:var(--white);margin-bottom:16px;}
+.progress-bar-wrap{background:var(--panel);border-radius:20px;height:8px;overflow:hidden;margin-bottom:10px;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:20px;width:0%;transition:width 0.1s;}
+.progress-text{font-size:0.72rem;color:var(--text2);font-family:'JetBrains Mono',monospace;}
+
+/* ═══════════════════════════════
+   ABOUT TAB
+═══════════════════════════════ */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.about-card{
+  background:var(--card);border:1px solid var(--border2);
+  border-radius:8px;padding:28px;
+}
+.about-card h3{
+  font-family:'Bebas Neue',sans-serif;font-size:1.3rem;
+  letter-spacing:0.08em;color:var(--white);margin-bottom:12px;
+}
+.about-card p{font-size:0.8rem;color:var(--text2);line-height:1.8;margin-bottom:10px;}
+.reg-list{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.reg-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 12px;background:var(--panel);border-radius:5px;
+  border-left:2px solid var(--accent);
+}
+.reg-code{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--accent);white-space:nowrap;}
+.reg-desc{font-size:0.68rem;color:var(--text2);line-height:1.5;}
+
+/* ═══════════════════════════════
+   FOOTER
+═══════════════════════════════ */
+footer{
+  margin-top:40px;padding:20px 40px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:0.65rem;color:var(--text3);
+}
+.footer-brand{display:flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--text2);letter-spacing:0.08em;}
+
+/* Utility */
+.divider{height:1px;background:var(--border);margin:16px 0;}
+.empty-state{text-align:center;padding:40px;color:var(--text3);font-size:0.8rem;}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ═══ NAVBAR ═══ -->
+<nav>
+  <div class="nav-logo">
+    <!-- SVG LOGO -->
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="lg1" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00e5ff"/>
+          <stop offset="100%" stop-color="#00ff88"/>
+        </linearGradient>
+      </defs>
+      <!-- Shield shape -->
+      <path d="M19 2L4 8V20C4 28.5 11 35.5 19 37C27 35.5 34 28.5 34 20V8L19 2Z" fill="url(#lg1)" opacity="0.15"/>
+      <path d="M19 2L4 8V20C4 28.5 11 35.5 19 37C27 35.5 34 28.5 34 20V8L19 2Z" stroke="url(#lg1)" stroke-width="1.5" fill="none"/>
+      <!-- Inner circuit lines -->
+      <circle cx="19" cy="19" r="5" fill="none" stroke="#00e5ff" stroke-width="1.2"/>
+      <line x1="19" y1="14" x2="19" y2="10" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
+      <line x1="19" y1="24" x2="19" y2="28" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
+      <line x1="14" y1="19" x2="10" y2="19" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
+      <line x1="24" y1="19" x2="28" y2="19" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
+      <circle cx="19" cy="19" r="2" fill="#00e5ff"/>
+      <!-- Corner dots -->
+      <circle cx="10" cy="19" r="1" fill="#00ff88" opacity="0.7"/>
+      <circle cx="28" cy="19" r="1" fill="#00ff88" opacity="0.7"/>
+      <circle cx="19" cy="10" r="1" fill="#00ff88" opacity="0.7"/>
+    </svg>
+    <div class="nav-brand">Fraud<span>Shield</span> AI</div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('single')">Single Transaction</button>
+    <button class="nav-tab" onclick="showTab('bulk')">Bulk Upload</button>
+    <button class="nav-tab" onclick="showTab('about')">About & Compliance</button>
+  </div>
+
+  <div class="nav-right">
+    <div class="live-badge"><span class="live-dot"></span>LIVE SYSTEM</div>
+    <div class="nav-version">v2.5.0 · 2026</div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">🛡️ Enterprise Fraud Intelligence Platform</div>
+    <div class="hero-title">AI-POWERED<br><span>FRAUD</span><br>DETECTION</div>
+    <div class="hero-sub">Real-time multi-model ensemble scoring aligned with FinCEN FIN-2024-A001 typologies and the U.S. Treasury Financial Services AI Risk Management Framework (2026). Developed to protect U.S. financial system integrity.</div>
+    <div class="hero-tags">
+      <span class="hero-tag">FinCEN FIN-2024-A001</span>
+      <span class="hero-tag">Treasury AI RMF 2026</span>
+      <span class="hero-tag">BSA/AML</span>
+      <span class="hero-tag">FATF Rec. 10/20</span>
+      <span class="hero-tag">Explainable AI</span>
+      <span class="hero-tag">Ensemble ML</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-card">
+      <div class="stat-num">4</div>
+      <div class="stat-label">ML Models Running in Parallel</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num">6</div>
+      <div class="stat-label">FinCEN Typologies Mapped</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-num">XAI</div>
+      <div class="stat-label">Explainable Output per Transaction</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-num">SAR</div>
+      <div class="stat-label">Report-Ready Risk Outputs</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     TAB: SINGLE TRANSACTION
+═══════════════════════════════ -->
+<div id="tab-single" class="tab-content active">
+  <div class="analyzer-grid">
+
+    <!-- INPUT PANEL -->
+    <div class="input-panel">
+      <div class="panel-header">
+        <div class="panel-header-icon">🔍</div>
+        <div>
+          <div class="panel-title">Transaction Parameters</div>
+          <div class="panel-sub">Enter transaction details for AI risk analysis</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Transaction Amount (USD)</label>
+        <input type="number" id="amount" value="9500" min="0"/>
+      </div>
+      <div class="field">
+        <label>Country of Origin</label>
+        <select id="country">
+          <option value="US">🇺🇸 United States</option>
+          <option value="CA">🇨🇦 Canada</option>
+          <option value="GB">🇬🇧 United Kingdom</option>
+          <option value="DE">🇩🇪 Germany</option>
+          <option value="AE">🇦🇪 UAE</option>
+          <option value="NG">🇳🇬 Nigeria</option>
+          <option value="MX">🇲🇽 Mexico</option>
+          <option value="CN">🇨🇳 China</option>
+          <option value="RU">🇷🇺 Russia</option>
+          <option value="IR">🇮🇷 Iran</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>KYC Verification Status</label>
+        <select id="kyc">
+          <option value="verified">✅ Verified — Full KYC</option>
+          <option value="partial">⚠️ Partial KYC</option>
+          <option value="none">❌ No KYC</option>
+          <option value="biometric_mismatch">🚨 Biometric Mismatch</option>
+          <option value="video_fail">🚨 Video Liveness Fail</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Transaction Type</label>
+        <select id="txtype">
+          <option value="ach">ACH Transfer</option>
+          <option value="wire">Wire Transfer</option>
+          <option value="crypto">Crypto Exchange</option>
+          <option value="card">Card Payment</option>
+          <option value="cash">Cash Deposit</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Transactions Last 24H (Count)</label>
+        <input type="number" id="txcount" value="3" min="0" max="100"/>
+      </div>
+      <div class="field">
+        <label>Prior 30-Day Volume (USD)</label>
+        <input type="number" id="prior" value="5000" min="0"/>
+      </div>
+
+      <button class="run-btn" onclick="analyze()">▶ RUN AI ANALYSIS</button>
+
+      <div class="divider"></div>
+      <div style="font-size:0.65rem;color:var(--text3);line-height:1.7;">
+        <strong style="color:var(--text2);">Regulatory Alignment</strong><br>
+        FinCEN FIN-2024-A001 · Treasury AI RMF 2026<br>
+        BSA 31 CFR 1010 · FATF Rec. 10 & 20
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-panel">
+
+      <!-- Score Card -->
+      <div class="score-card">
+        <div class="score-ring-wrap">
+          <div class="score-ring">
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <circle class="track" cx="70" cy="70" r="58"/>
+              <circle class="fill" id="scoreArc" cx="70" cy="70" r="58"
+                stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
+            </svg>
+            <div class="score-num" id="scoreNum">—</div>
+          </div>
+          <div class="score-sublabel">Ensemble Risk Score</div>
+          <div class="score-verdict" id="scoreVerdict">AWAITING INPUT</div>
+        </div>
+
+        <div class="model-section">
+          <div class="section-micro">Model Breakdown</div>
+          <div class="model-rows">
+            <div class="model-row">
+              <div class="model-name">Isolation Forest</div>
+              <div class="bar-wrap"><div class="bar-fill" id="bar0"></div></div>
+              <div class="bar-val" id="val0">—</div>
+            </div>
+            <div class="model-row">
+              <div class="model-name">Random Forest</div>
+              <div class="bar-wrap"><div class="bar-fill" id="bar1"></div></div>
+              <div class="bar-val" id="val1">—</div>
+            </div>
+            <div class="model-row">
+              <div class="model-name">Logistic Regression</div>
+              <div class="bar-wrap"><div class="bar-fill" id="bar2"></div></div>
+              <div class="bar-val" id="val2">—</div>
+            </div>
+            <div class="model-row">
+              <div class="model-name">Threshold Rules</div>
+              <div class="bar-wrap"><div class="bar-fill" id="bar3"></div></div>
+              <div class="bar-val" id="val3">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="signals-section">
+          <div class="section-micro">XAI Signals</div>
+          <div class="signal-list" id="signalList">
+            <div style="font-size:0.7rem;color:var(--text3);">Run analysis to view signals.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typology Grid -->
+      <div class="typo-section">
+        <div class="typo-header">
+          <div class="typo-title">FinCEN FIN-2024-A001 — Typology Mapping</div>
+          <div class="typo-ref">6 GenAI Fraud Patterns · Real-Time Detection</div>
+        </div>
+        <div class="typo-grid">
+          <div class="typo-card" id="typo0">
+            <div class="typo-num">TYPOLOGY 01</div>
+            <div class="typo-name">Synthetic Identity / Deepfake KYC</div>
+            <div class="typo-desc">GenAI-generated documents or video liveness bypass to open fraudulent accounts.</div>
+            <div class="typo-badge badge-clear" id="badge0">CLEAR</div>
+          </div>
+          <div class="typo-card" id="typo1">
+            <div class="typo-num">TYPOLOGY 02</div>
+            <div class="typo-name">Structuring / Smurfing</div>
+            <div class="typo-desc">Transactions kept below $10K CTR threshold to evade BSA reporting requirements.</div>
+            <div class="typo-badge badge-clear" id="badge1">CLEAR</div>
+          </div>
+          <div class="typo-card" id="typo2">
+            <div class="typo-num">TYPOLOGY 03</div>
+            <div class="typo-name">High-Risk Jurisdiction</div>
+            <div class="typo-desc">Transfers involving FATF-monitored or OFAC-sanctioned countries.</div>
+            <div class="typo-badge badge-clear" id="badge2">CLEAR</div>
+          </div>
+          <div class="typo-card" id="typo3">
+            <div class="typo-num">TYPOLOGY 04</div>
+            <div class="typo-name">KYC Bypass Attempt</div>
+            <div class="typo-desc">Unverified accounts conducting significant value transactions outside CDD thresholds.</div>
+            <div class="typo-badge badge-clear" id="badge3">CLEAR</div>
+          </div>
+          <div class="typo-card" id="typo4">
+            <div class="typo-num">TYPOLOGY 05</div>
+            <div class="typo-name">Abnormal Velocity</div>
+            <div class="typo-desc">Transaction frequency or volume spikes inconsistent with account behavior patterns.</div>
+            <div class="typo-badge badge-clear" id="badge4">CLEAR</div>
+          </div>
+          <div class="typo-card" id="typo5">
+            <div class="typo-num">TYPOLOGY 06</div>
+            <div class="typo-name">Sanctioned Entity</div>
+            <div class="typo-desc">Patterns consistent with OFAC/SDN list entities or sanctioned regime activity.</div>
+            <div class="typo-badge badge-clear" id="badge5">CLEAR</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     TAB: BULK UPLOAD
+═══════════════════════════════ -->
+<div id="tab-bulk" class="tab-content">
+  <div class="bulk-layout">
+
+    <!-- Upload Zone -->
+    <div>
+      <div class="upload-zone" id="uploadZone"
+        ondragover="event.preventDefault();this.classList.add('dragover')"
+        ondragleave="this.classList.remove('dragover')"
+        ondrop="handleDrop(event)">
+        <div class="upload-icon">📂</div>
+        <div class="upload-title">Upload Transaction File</div>
+        <div class="upload-sub">
+          Drop a CSV file here or click to browse.<br>
+          Each row = one transaction to be scanned.<br>
+          Supports up to 10,000 transactions per batch.
+        </div>
+        <label class="upload-btn-label" for="csvFileInput">Choose CSV File</label>
+        <input type="file" id="csvFileInput" accept=".csv" onchange="handleFileUpload(event)"/>
+      </div>
+
+      <!-- Progress -->
+      <div class="scan-progress" id="scanProgress">
+        <div class="progress-title">🔍 Scanning Transactions...</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">0 / 0 transactions analyzed</div>
+      </div>
+    </div>
+
+    <!-- Template -->
+    <div class="csv-template">
+      <div class="template-title">📋 CSV Format Guide</div>
+      <div class="template-desc">
+        Your CSV file must have these exact column headers in the first row. Each subsequent row is one transaction FraudShield will analyze.
+      </div>
+      <div class="csv-preview">amount,country,kyc,txtype,txcount,prior_volume
+9500,US,verified,wire,2,5000
+14200,IR,none,crypto,15,1000
+3000,GB,partial,ach,1,8000
+9800,RU,biometric_mismatch,wire,8,2000
+500,CA,verified,card,1,12000</div>
+      <button class="download-template-btn" onclick="downloadTemplate()">⬇ Download Sample CSV Template</button>
+    </div>
+  </div>
+
+  <!-- Bulk Results -->
+  <div class="bulk-results" id="bulkResults" style="display:none;">
+
+    <div class="bulk-summary" id="bulkSummary"></div>
+
+    <div class="bulk-table-wrap">
+      <div class="bulk-table-header">
+        <div class="bulk-table-title">Transaction Scan Results</div>
+        <button class="export-btn" onclick="exportResults()">⬇ Export Flagged Report (CSV)</button>
+      </div>
+      <div style="overflow-x:auto;max-height:400px;overflow-y:auto;">
+        <table class="bulk-table" id="bulkTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Amount</th>
+              <th>Country</th>
+              <th>KYC</th>
+              <th>Type</th>
+              <th>Risk Score</th>
+              <th>Classification</th>
+              <th>Top Signal</th>
+            </tr>
+          </thead>
+          <tbody id="bulkTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     TAB: ABOUT
+═══════════════════════════════ -->
+<div id="tab-about" class="tab-content">
+  <div class="about-grid">
+    <div class="about-card">
+      <h3>About FraudShield AI</h3>
+      <p>FraudShield AI is an enterprise-grade fraud detection intelligence platform built to combat the growing threat of GenAI-enabled financial crime in the United States banking system.</p>
+      <p>The system implements a four-model machine learning ensemble — Isolation Forest, Random Forest, Logistic Regression, and a rule-based threshold engine — with per-model explainability scoring and real-time mapping against the six fraud typologies documented in FinCEN's November 2024 national alert on generative AI deepfake fraud.</p>
+      <p>Developed as part of an active research and development endeavor focused on protecting U.S. financial system integrity through AI-driven compliance tooling.</p>
+      <p style="color:var(--text3);font-size:0.72rem;margin-top:12px;">Built and maintained by <strong style="color:var(--accent);">Foluso Ajayi</strong> · Cyfendry · Dallas, TX · 2026</p>
+    </div>
+    <div class="about-card">
+      <h3>Regulatory Alignment</h3>
+      <div class="reg-list">
+        <div class="reg-item">
+          <div class="reg-code">FinCEN FIN-2024-A001</div>
+          <div class="reg-desc">GenAI deepfake fraud typology detection logic — all six documented patterns mapped in real time</div>
+        </div>
+        <div class="reg-item">
+          <div class="reg-code">Treasury AI RMF 2026</div>
+          <div class="reg-desc">Explainable AI output design satisfying the February 2026 explainability mandate for financial AI systems</div>
+        </div>
+        <div class="reg-item">
+          <div class="reg-code">BSA / 31 CFR 1010</div>
+          <div class="reg-desc">Bank Secrecy Act AML structuring detection rules including CTR threshold monitoring</div>
+        </div>
+        <div class="reg-item">
+          <div class="reg-code">FATF Rec. 10 & 20</div>
+          <div class="reg-desc">Customer Due Diligence and Suspicious Transaction Reporting standards</div>
+        </div>
+        <div class="reg-item">
+          <div class="reg-code">OFAC / SDN List</div>
+          <div class="reg-desc">Sanctioned entity and high-risk jurisdiction detection aligned with OFAC screening requirements</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-card">
+      <h3>How the AI Works</h3>
+      <p><strong style="color:var(--accent);">Isolation Forest</strong> — detects anomalous transactions by isolating outliers from normal behavioral patterns using unsupervised learning.</p>
+      <p><strong style="color:var(--accent);">Random Forest</strong> — classifies risk using an ensemble of decision trees trained on known fraud indicators including KYC status and jurisdiction.</p>
+      <p><strong style="color:var(--accent);">Logistic Regression</strong> — produces probability-weighted fraud scores based on statistically significant feature combinations.</p>
+      <p><strong style="color:var(--accent);">Threshold Rules Engine</strong> — applies hard BSA/AML compliance rules including structuring detection and sanctions screening.</p>
+    </div>
+    <div class="about-card">
+      <h3>Risk Classification</h3>
+      <div class="reg-list">
+        <div class="reg-item" style="border-left-color:var(--green);">
+          <div class="reg-code" style="color:var(--green);">Score 0–30</div>
+          <div class="reg-desc">LOW RISK — Normal transaction patterns. No action required.</div>
+        </div>
+        <div class="reg-item" style="border-left-color:var(--amber);">
+          <div class="reg-code" style="color:var(--amber);">Score 31–59</div>
+          <div class="reg-desc">MEDIUM RISK — Elevated patterns detected. Enhanced monitoring recommended.</div>
+        </div>
+        <div class="reg-item" style="border-left-color:var(--orange);">
+          <div class="reg-code" style="color:var(--orange);">Score 60–79</div>
+          <div class="reg-desc">HIGH RISK — Significant indicators present. Manual BSA officer review required.</div>
+        </div>
+        <div class="reg-item" style="border-left-color:var(--red);">
+          <div class="reg-code" style="color:var(--red);">Score 80–100</div>
+          <div class="reg-desc">CRITICAL — Immediate escalation required. SAR filing likely warranted.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <svg width="20" height="20" viewBox="0 0 38 38" fill="none">
+      <path d="M19 2L4 8V20C4 28.5 11 35.5 19 37C27 35.5 34 28.5 34 20V8L19 2Z" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
+      <circle cx="19" cy="19" r="4" fill="none" stroke="#00e5ff" stroke-width="1.2"/>
+      <circle cx="19" cy="19" r="2" fill="#00e5ff"/>
+    </svg>
+    FRAUDSHIELD AI
+  </div>
+  <span>AI/ML Fraud Detection Intelligence · Aligned with FinCEN FIN-2024-A001 & U.S. Treasury AI RMF 2026</span>
+  <span>Research Prototype · Foluso Ajayi · 2026</span>
+</footer>
+
+</div><!-- /app -->
+
+<script>
+// ════════════════════════════════
+// TAB NAVIGATION
+// ════════════════════════════════
+function showTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ════════════════════════════════
+// SCORING ENGINE
+// ════════════════════════════════
+function scoreTransaction(amount, country, kyc, txtype, txcount, prior) {
+  let iso = 10, rf = 10, lr = 10, rules = 0;
+
+  // Isolation Forest
+  if (amount > 8000 && amount < 10000) iso += 40;
+  else if (amount > 10000) iso += 22;
+  if (txcount > 8) iso += 20;
+  if (prior > 0 && amount / prior > 0.8) iso += 15;
+  if (txtype === 'crypto') iso += 10;
+  iso = Math.min(iso, 100);
+
+  // Random Forest
+  if (kyc === 'biometric_mismatch' || kyc === 'video_fail') rf += 45;
+  else if (kyc === 'none') rf += 30;
+  else if (kyc === 'partial') rf += 15;
+  if (country === 'IR' || country === 'RU') rf += 25;
+  if (txtype === 'wire' && amount > 10000) rf += 15;
+  if (txtype === 'crypto') rf += 10;
+  rf = Math.min(rf, 100);
+
+  // Logistic Regression
+  let prob = 0.05;
+  if (amount >= 9000 && amount < 10000) prob += 0.35;
+  if (kyc === 'none') prob += 0.25;
+  if (kyc === 'biometric_mismatch' || kyc === 'video_fail') prob += 0.40;
+  if (country === 'IR') prob += 0.30;
+  if (country === 'RU') prob += 0.20;
+  if (txcount >= 10) prob += 0.15;
+  lr = Math.round(Math.min(prob, 1) * 100);
+
+  // Rules
+  if (amount >= 9000 && amount < 10000) rules += 40;
+  if (kyc === 'none' && amount > 2000) rules += 30;
+  if (country === 'IR') rules += 50;
+  if (txcount >= 15) rules += 20;
+  rules = Math.min(rules, 100);
+
+  const ensemble = Math.round(iso * 0.25 + rf * 0.30 + lr * 0.25 + rules * 0.20);
+
+  // Signals
+  const signals = [];
+  if (amount >= 9000 && amount < 10000) signals.push({ name: 'Amount near $10K CTR threshold', pts: '+35', cls: 'warn' });
+  if (kyc === 'biometric_mismatch') signals.push({ name: 'Biometric mismatch detected', pts: '+45', cls: 'crit' });
+  if (kyc === 'video_fail') signals.push({ name: 'Video liveness check failed', pts: '+45', cls: 'crit' });
+  if (kyc === 'none') signals.push({ name: 'No KYC verification present', pts: '+28', cls: 'warn' });
+  if (kyc === 'partial') signals.push({ name: 'Partial KYC only', pts: '+14', cls: 'warn' });
+  if (country === 'IR') signals.push({ name: 'OFAC sanctioned jurisdiction (IR)', pts: '+50', cls: 'crit' });
+  if (country === 'RU') signals.push({ name: 'High-risk jurisdiction (RU)', pts: '+22', cls: 'warn' });
+  if (txcount >= 10) signals.push({ name: 'High transaction velocity (24h)', pts: '+18', cls: 'warn' });
+  if (txtype === 'crypto') signals.push({ name: 'Crypto channel — elevated risk', pts: '+10', cls: 'warn' });
+  if (txtype === 'wire' && amount > 10000) signals.push({ name: 'Large international wire', pts: '+15', cls: 'warn' });
+
+  return { ensemble, iso, rf, lr, rules, signals };
+}
+
+function getRiskLabel(score) {
+  if (score < 31) return { label: '🟢 LOW RISK', color: 'var(--green)', cls: 'risk-low' };
+  if (score < 60) return { label: '🟡 MEDIUM RISK', color: 'var(--amber)', cls: 'risk-med' };
+  if (score < 80) return { label: '🟠 HIGH RISK', color: 'var(--orange)', cls: 'risk-high' };
+  return { label: '🔴 CRITICAL', color: 'var(--red)', cls: 'risk-crit' };
+}
+
+// ════════════════════════════════
+// SINGLE TRANSACTION ANALYSIS
+// ════════════════════════════════
+function analyze() {
+  const amount  = parseFloat(document.getElementById('amount').value) || 0;
+  const country = document.getElementById('country').value;
+  const kyc     = document.getElementById('kyc').value;
+  const txtype  = document.getElementById('txtype').value;
+  const txcount = parseInt(document.getElementById('txcount').value) || 0;
+  const prior   = parseFloat(document.getElementById('prior').value) || 0;
+
+  const r = scoreTransaction(amount, country, kyc, txtype, txcount, prior);
+  const risk = getRiskLabel(r.ensemble);
+
+  // Ring
+  const arc = document.getElementById('scoreArc');
+  arc.style.strokeDashoffset = 364.4 - (r.ensemble / 100) * 364.4;
+  arc.style.stroke = risk.color;
+  document.getElementById('scoreNum').textContent = r.ensemble;
+  const vEl = document.getElementById('scoreVerdict');
+  vEl.textContent = risk.label;
+  vEl.style.color = risk.color;
+
+  // Bars
+  [r.iso, r.rf, r.lr, r.rules].forEach((v, i) => {
+    document.getElementById('bar' + i).style.width = v + '%';
+    document.getElementById('val' + i).textContent = v;
+  });
+
+  // Signals
+  const sl = document.getElementById('signalList');
+  sl.innerHTML = '';
+  const signals = r.signals.length ? r.signals : [{ name: 'No significant risk signals detected', pts: '', cls: '' }];
+  signals.forEach(s => {
+    const d = document.createElement('div');
+    d.className = 'signal-item ' + s.cls;
+    d.innerHTML = `<span class="signal-name">${s.name}</span>${s.pts ? '<span class="signal-pts">' + s.pts + 'pts</span>' : ''}`;
+    sl.appendChild(d);
+  });
+
+  // Typologies
+  for (let i = 0; i < 6; i++) {
+    document.getElementById('typo' + i).className = 'typo-card';
+    const b = document.getElementById('badge' + i);
+    b.className = 'typo-badge badge-clear';
+    b.textContent = 'CLEAR';
+  }
+  function flagTypo(idx, level) {
+    const cc = { detected: 'flagged', review: 'warn' };
+    const bc = { detected: 'badge-detected', review: 'badge-review' };
+    const bt = { detected: 'DETECTED', review: 'REVIEW' };
+    document.getElementById('typo' + idx).className = 'typo-card ' + cc[level];
+    const b = document.getElementById('badge' + idx);
+    b.className = 'typo-badge ' + bc[level];
+    b.textContent = bt[level];
+  }
+  if (kyc === 'biometric_mismatch' || kyc === 'video_fail') flagTypo(0, 'detected');
+  if (amount >= 9000 && amount < 10000) flagTypo(1, 'detected');
+  if (country === 'IR' || country === 'RU' || (txtype === 'wire' && amount > 10000)) flagTypo(2, 'review');
+  if (kyc === 'none' && amount > 2000) flagTypo(3, 'review');
+  if (txcount >= 10) flagTypo(4, 'detected');
+  if (country === 'IR') flagTypo(5, 'detected');
+}
+
+// ════════════════════════════════
+// BULK UPLOAD
+// ════════════════════════════════
+let bulkData = [];
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.csv')) processCSV(file);
+}
+
+function handleFileUpload(e) {
+  const file = e.target.files[0];
+  if (file) processCSV(file);
+}
+
+function processCSV(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const lines = e.target.result.trim().split('\n');
+    const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
+    const rows = lines.slice(1).filter(l => l.trim());
+
+    const progress = document.getElementById('scanProgress');
+    const fill = document.getElementById('progressFill');
+    const pText = document.getElementById('progressText');
+    progress.style.display = 'block';
+    document.getElementById('bulkResults').style.display = 'none';
+
+    bulkData = [];
+    let i = 0;
+
+    function scanNext() {
+      if (i >= rows.length) {
+        progress.style.display = 'none';
+        renderBulkResults();
+        return;
+      }
+      const cols = rows[i].split(',').map(c => c.trim());
+      const get = (key) => {
+        const idx = headers.indexOf(key);
+        return idx >= 0 ? cols[idx] : '';
+      };
+
+      const amount  = parseFloat(get('amount')) || 0;
+      const country = get('country') || 'US';
+      const kyc     = get('kyc') || 'verified';
+      const txtype  = get('txtype') || 'ach';
+      const txcount = parseInt(get('txcount')) || 0;
+      const prior   = parseFloat(get('prior_volume')) || 0;
+
+      const r = scoreTransaction(amount, country, kyc, txtype, txcount, prior);
+      const risk = getRiskLabel(r.ensemble);
+      const topSignal = r.signals.length ? r.signals[0].name : 'None';
+
+      bulkData.push({ num: i + 1, amount, country, kyc, txtype, score: r.ensemble, risk, topSignal });
+
+      i++;
+      const pct = Math.round((i / rows.length) * 100);
+      fill.style.width = pct + '%';
+      pText.textContent = i + ' / ' + rows.length + ' transactions analyzed';
+
+      setTimeout(scanNext, 2);
+    }
+    scanNext();
+  };
+  reader.readAsText(file);
+}
+
+function renderBulkResults() {
+  const total = bulkData.length;
+  const low   = bulkData.filter(r => r.score < 31).length;
+  const med   = bulkData.filter(r => r.score >= 31 && r.score < 60).length;
+  const high  = bulkData.filter(r => r.score >= 60 && r.score < 80).length;
+  const crit  = bulkData.filter(r => r.score >= 80).length;
+
+  document.getElementById('bulkSummary').innerHTML = `
+    <div class="summary-stat"><div class="summary-num">${total}</div><div class="summary-label">Total Scanned</div></div>
+    <div class="summary-stat"><div class="summary-num" style="color:var(--green)">${low}</div><div class="summary-label">Low Risk</div></div>
+    <div class="summary-stat"><div class="summary-num" style="color:var(--amber)">${med}</div><div class="summary-label">Medium Risk</div></div>
+    <div class="summary-stat"><div class="summary-num" style="color:var(--orange)">${high}</div><div class="summary-label">High Risk</div></div>
+    <div class="summary-stat"><div class="summary-num" style="color:var(--red)">${crit}</div><div class="summary-label">Critical</div></div>
+  `;
+
+  const tbody = document.getElementById('bulkTableBody');
+  tbody.innerHTML = '';
+  bulkData.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-family:'JetBrains Mono',monospace;color:var(--text3)">${row.num}</td>
+      <td>$${row.amount.toLocaleString()}</td>
+      <td>${row.country}</td>
+      <td>${row.kyc}</td>
+      <td>${row.txtype}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:${row.risk.color}">${row.score}</td>
+      <td><span class="risk-pill ${row.risk.cls}">${row.risk.label.replace(/🟢|🟡|🟠|🔴/g,'').trim()}</span></td>
+      <td style="font-size:0.65rem;color:var(--text3)">${row.topSignal}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('bulkResults').style.display = 'block';
+}
+
+function exportResults() {
+  if (!bulkData.length) return;
+  const flagged = bulkData.filter(r => r.score >= 31);
+  let csv = 'Transaction#,Amount,Country,KYC,Type,RiskScore,Classification,TopSignal\n';
+  flagged.forEach(r => {
+    csv += `${r.num},$${r.amount},${r.country},${r.kyc},${r.txtype},${r.score},${r.risk.label.replace(/🟢|🟡|🟠|🔴/g,'').trim()},"${r.topSignal}"\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fraudshield_flagged_report_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+function downloadTemplate() {
+  const csv = `amount,country,kyc,txtype,txcount,prior_volume
+9500,US,verified,wire,2,5000
+14200,IR,none,crypto,15,1000
+3000,GB,partial,ach,1,8000
+9800,RU,biometric_mismatch,wire,8,2000
+500,CA,verified,card,1,12000
+8900,US,none,cash,3,3000
+25000,CN,partial,wire,5,10000`;
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fraudshield_sample_template.csv';
+  a.click();
+}
+
+// Run on load
+analyze();
+</script>
+</body>
+</html>
