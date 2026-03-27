@@ -1,6 +1,6 @@
 FraudShield AI
 AI-Powered Fraud Detection & AML Intelligence Platform — All Payment Types
-Live demo: #https://ajayfoluso.github.io/fraudshield/
+
 
 Proof of Concept v3.2.0 — Built for regulatory demonstration and institutional review
 
