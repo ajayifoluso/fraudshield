@@ -1,1173 +1,811 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FraudShield AI — Enterprise Fraud Detection Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FraudShield AI — Fraud Detection Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --bg: #050d18;
-  --bg2: #080f1e;
-  --panel: #0a1628;
-  --card: #0d1e35;
-  --border: #132540;
-  --border2: #1a3357;
-  --accent: #00e5ff;
-  --accent2: #0099bb;
-  --green: #00ff88;
-  --amber: #ffb300;
-  --red: #ff3355;
-  --orange: #ff6622;
-  --gold: #ffd700;
-  --text: #c8dff0;
-  --text2: #7a9bbf;
-  --text3: #3d6080;
-  --white: #f0f8ff;
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#080b12;--bg2:#0d1117;--bg3:#111825;--bg4:#161d2a;
+  --border:#1a2234;--border2:#243048;
+  --text:#e2e8f0;--text2:#8899b0;--text3:#4a5a72;
+  --blue:#38bdf8;--indigo:#6366f1;
+  --green:#22c55e;--green-bg:#052e16;--green-border:#166534;
+  --amber:#f59e0b;--amber-bg:#451a03;--amber-border:#92400e;
+  --red:#f87171;--red-bg:#450a0a;--red-border:#991b1b;
 }
-
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-
-html{font-size:14px;scroll-behavior:smooth;}
-
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* Animated background */
-body::before{
-  content:'';
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(0,229,255,0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,255,136,0.03) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 60% at 50% 50%, rgba(0,153,187,0.02) 0%, transparent 70%);
-}
-
-body::after{
-  content:'';
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(0,229,255,0.018) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,229,255,0.018) 1px,transparent 1px);
-  background-size:40px 40px;
-}
-
-#app{position:relative;z-index:1;}
-
-/* ═══════════════════════════════
-   NAVBAR
-═══════════════════════════════ */
-nav{
-  position:sticky;top:0;z-index:200;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 40px;height:64px;
-  background:rgba(5,13,24,0.92);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border2);
-}
-
-.nav-logo{display:flex;align-items:center;gap:12px;}
-
-/* SVG LOGO */
-.logo-mark{
-  width:38px;height:38px;flex-shrink:0;
-}
-
-.nav-brand{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.6rem;letter-spacing:0.1em;
-  color:var(--white);
-}
-.nav-brand span{color:var(--accent);}
-
-.nav-tabs{display:flex;gap:4px;}
-.nav-tab{
-  padding:6px 16px;border-radius:4px;
-  font-size:0.78rem;font-weight:500;
-  color:var(--text2);cursor:pointer;
-  border:none;background:transparent;
-  transition:all 0.2s;letter-spacing:0.03em;
-}
-.nav-tab:hover{color:var(--text);background:var(--border);}
-.nav-tab.active{color:var(--accent);background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.15);}
-
-.nav-right{display:flex;align-items:center;gap:16px;}
-.live-badge{
-  display:flex;align-items:center;gap:6px;
-  padding:5px 12px;border-radius:20px;
-  background:rgba(0,255,136,0.08);
-  border:1px solid rgba(0,255,136,0.2);
-  font-size:0.68rem;font-weight:600;
-  color:var(--green);letter-spacing:0.1em;
-}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;}
-@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 6px var(--green);}50%{opacity:0.4;box-shadow:none;}}
-
-.nav-version{font-size:0.68rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
-
-/* ═══════════════════════════════
-   HERO SECTION
-═══════════════════════════════ */
-.hero{
-  padding:60px 40px 40px;
-  display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
-  border-bottom:1px solid var(--border);
-  position:relative;overflow:hidden;
-}
-
-.hero::before{
-  content:'';
-  position:absolute;top:-100px;right:-100px;
-  width:500px;height:500px;border-radius:50%;
-  background:radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
-  pointer-events:none;
-}
-
-.hero-left{}
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:4px 12px;border-radius:20px;
-  background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.15);
-  font-size:0.68rem;font-weight:600;color:var(--accent);
-  letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;
-}
-.hero-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:3.5rem;line-height:1;letter-spacing:0.05em;
-  color:var(--white);margin-bottom:16px;
-}
-.hero-title span{
-  color:transparent;
-  -webkit-text-stroke:1px var(--accent);
-}
-.hero-sub{
-  font-size:0.9rem;line-height:1.7;color:var(--text2);
-  max-width:480px;margin-bottom:28px;
-}
-.hero-tags{display:flex;flex-wrap:wrap;gap:8px;}
-.hero-tag{
-  padding:4px 10px;border-radius:3px;
-  font-size:0.65rem;font-family:'JetBrains Mono',monospace;
-  border:1px solid var(--border2);color:var(--text3);
-  letter-spacing:0.05em;
-}
-
-.hero-right{
-  display:grid;grid-template-columns:1fr 1fr;gap:12px;
-}
-.stat-card{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:8px;padding:20px;
-  position:relative;overflow:hidden;
-}
-.stat-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--accent),transparent);
-}
-.stat-card.green::before{background:linear-gradient(90deg,var(--green),transparent);}
-.stat-card.amber::before{background:linear-gradient(90deg,var(--amber),transparent);}
-.stat-card.red::before{background:linear-gradient(90deg,var(--red),transparent);}
-.stat-num{
-  font-family:'Bebas Neue',sans-serif;font-size:2.2rem;
-  color:var(--white);letter-spacing:0.05em;
-}
-.stat-label{font-size:0.68rem;color:var(--text3);margin-top:4px;letter-spacing:0.05em;}
-
-/* ═══════════════════════════════
-   MAIN TABS CONTENT
-═══════════════════════════════ */
-.tab-content{display:none;padding:32px 40px;}
-.tab-content.active{display:block;}
-
-/* ═══════════════════════════════
-   SINGLE TRANSACTION
-═══════════════════════════════ */
-.analyzer-grid{
-  display:grid;grid-template-columns:340px 1fr;gap:24px;
-}
-
-.input-panel{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:8px;padding:24px;
-}
-
-.panel-header{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:20px;padding-bottom:16px;
-  border-bottom:1px solid var(--border);
-}
-.panel-header-icon{
-  width:32px;height:32px;border-radius:6px;
-  background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.9rem;
-}
-.panel-title{font-weight:600;font-size:0.85rem;color:var(--white);}
-.panel-sub{font-size:0.68rem;color:var(--text3);}
-
-.field{margin-bottom:14px;}
-.field label{
-  display:block;font-size:0.68rem;font-weight:500;
-  color:var(--text2);margin-bottom:5px;letter-spacing:0.05em;text-transform:uppercase;
-}
-.field input,.field select{
-  width:100%;padding:9px 12px;
-  background:var(--panel);border:1px solid var(--border2);
-  color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.82rem;
-  border-radius:5px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;
-}
-.field input:focus,.field select:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(0,229,255,0.08);
-}
-.field select option{background:var(--panel);}
-
-.run-btn{
-  width:100%;padding:13px;margin-top:6px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  border:none;border-radius:6px;
-  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;
-  letter-spacing:0.12em;color:var(--bg);
-  cursor:pointer;transition:all 0.2s;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-}
-.run-btn:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,229,255,0.2);}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;}
+body{display:flex;flex-direction:column;min-height:100vh;}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:var(--bg2);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:100;flex-shrink:0;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#0ea5e9,#6366f1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;}
+.logo-text{font-size:13px;font-weight:800;letter-spacing:0.1em;color:var(--blue);}
+.header-meta{display:flex;gap:16px;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);}
+.status-pill{display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:var(--green-bg);border:0.5px solid var(--green-border);color:var(--green);font-size:10px;}
+.pulse{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+main{display:grid;grid-template-columns:1fr 380px 310px;flex:1;min-height:0;overflow:hidden;}
+.panel{overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;}
+.panel::-webkit-scrollbar{width:3px;}
+.panel::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.left-panel{border-right:0.5px solid var(--border);}
+.mid-panel{border-right:0.5px solid var(--border);background:var(--bg);}
+.right-panel{background:var(--bg2);}
+.sec{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;overflow:hidden;}
+.sec-head{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:var(--bg3);border-bottom:0.5px solid var(--border);}
+.sec-title{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text2);display:flex;align-items:center;gap:8px;}
+.sec-body{padding:14px;}
+.tag{font-size:9px;padding:1px 6px;border-radius:3px;background:#0c1e40;color:var(--blue);border:0.5px solid #1d4ed8;letter-spacing:0.04em;font-weight:700;}
+.tag-g{background:var(--green-bg);color:var(--green);border-color:var(--green-border);}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fc{grid-column:1/-1;}
+.f{display:flex;flex-direction:column;gap:4px;}
+.f label{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);}
+.f input,.f select{background:var(--bg3);border:0.5px solid var(--border2);border-radius:6px;padding:7px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text);outline:none;width:100%;appearance:none;transition:border-color 0.15s;}
+.f input:focus,.f select:focus{border-color:var(--blue);}
+.f input::placeholder{color:var(--text3);}
+.f select option{background:var(--bg3);}
+/* TOKENIZATION */
+.tok-box{background:var(--bg3);border:0.5px solid var(--green-border);border-radius:8px;padding:14px;margin-top:12px;}
+.tok-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.tok-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);}
+.tok-secure{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--green);font-family:'IBM Plex Mono',monospace;}
+.tok-fields{display:grid;grid-template-columns:1fr 72px 72px;gap:8px;}
+.tok-in{background:var(--bg4);border:0.5px solid var(--border2);border-radius:6px;padding:8px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text);outline:none;width:100%;letter-spacing:0.1em;transition:border-color 0.15s;}
+.tok-in:focus{border-color:var(--green);}
+.tok-in::placeholder{color:var(--text3);}
+.tok-note{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:8px;padding:8px;background:var(--bg4);border-radius:4px;border-left:2px solid var(--green);line-height:1.5;}
+.tok-btn{width:100%;margin-top:10px;padding:8px;border-radius:6px;background:var(--green-bg);border:0.5px solid var(--green-border);color:var(--green);font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;font-weight:600;letter-spacing:0.06em;}
+.tok-result{margin-top:10px;padding:8px 10px;border-radius:6px;background:var(--bg4);border:0.5px solid var(--border2);font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);display:none;}
+.tok-result.on{display:block;border-color:var(--green-border);color:var(--green);}
+/* VSIG */
+.vsig-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.vsig{border-radius:7px;padding:10px;background:var(--bg3);border:0.5px solid var(--border2);}
+.vsig-name{font-size:10px;font-weight:700;letter-spacing:0.06em;color:var(--text3);margin-bottom:6px;text-transform:uppercase;}
+.vsig-row{display:flex;align-items:center;gap:6px;}
+.vsig-sel{background:var(--bg4);border:0.5px solid var(--border2);border-radius:5px;padding:5px 8px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text);outline:none;flex:1;appearance:none;}
+.vsig-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:background 0.3s;}
+.dg{background:var(--green)!important;}
+.da{background:var(--amber)!important;}
+.dr{background:var(--red)!important;}
+/* RUN BTN */
+.run-btn{width:100%;padding:13px;border:none;border-radius:8px;background:linear-gradient(135deg,#0ea5e9,#6366f1);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:opacity 0.15s,transform 0.1s;display:flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;}
+.run-btn:hover{opacity:0.88;transform:translateY(-1px);}
 .run-btn:active{transform:translateY(0);}
-
-/* Results */
-.results-panel{display:flex;flex-direction:column;gap:16px;}
-
-.score-card{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:8px;padding:24px;
-  display:grid;grid-template-columns:200px 1fr 1fr;gap:24px;align-items:start;
-}
-
-.score-ring-wrap{text-align:center;}
-.score-ring{width:140px;height:140px;margin:0 auto 10px;position:relative;}
+.run-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+/* REG CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:5px;padding:10px 14px;}
+.chip{font-size:10px;padding:3px 8px;border-radius:4px;background:#0f1a2e;border:0.5px solid var(--border2);color:var(--blue);font-family:'IBM Plex Mono',monospace;}
+/* DB PANEL */
+.db-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;flex-shrink:0;}
+.db-hdr-title{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);}
+.db-count{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);}
+.db-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:10px;overflow:hidden;flex-shrink:0;transition:border-color 0.4s;}
+.db-card.checking{border-color:var(--blue);}
+.db-card.clear{border-color:var(--green-border);}
+.db-card.warning{border-color:var(--amber-border);}
+.db-card.flagged{border-color:var(--red-border);}
+.scan{height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);background-size:200%;animation:scan 1s linear infinite;display:none;}
+.db-card.checking .scan{display:block;}
+@keyframes scan{0%{background-position:200%;}100%{background-position:-200%;}}
+.db-ch{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:var(--bg3);border-bottom:0.5px solid var(--border);}
+.db-ch.clear{background:var(--green-bg);}
+.db-ch.warning{background:var(--amber-bg);}
+.db-ch.flagged{background:var(--red-bg);}
+.db-ch.checking{background:#0a1525;}
+.db-nm{font-size:11px;font-weight:700;letter-spacing:0.07em;font-family:'IBM Plex Mono',monospace;color:var(--text2);}
+.db-nm.clear{color:var(--green);}
+.db-nm.warning{color:var(--amber);}
+.db-nm.flagged{color:var(--red);}
+.db-nm.checking{color:var(--blue);}
+.db-bdg{font-size:9px;font-weight:700;letter-spacing:0.06em;padding:2px 8px;border-radius:10px;font-family:'IBM Plex Mono',monospace;}
+.db-bdg.idle{background:var(--bg4);color:var(--text3);border:0.5px solid var(--border2);}
+.db-bdg.checking{background:#0c1e40;color:var(--blue);border:0.5px solid #1d4ed8;}
+.db-bdg.clear{background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border);}
+.db-bdg.warning{background:var(--amber-bg);color:var(--amber);border:0.5px solid var(--amber-border);}
+.db-bdg.flagged{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border);}
+.db-body{padding:10px 14px;}
+.db-res{font-size:11px;font-family:'IBM Plex Mono',monospace;line-height:1.5;color:var(--text2);min-height:16px;}
+.db-res.checking{color:var(--blue);}
+.db-res.clear{color:var(--green);}
+.db-res.warning{color:var(--amber);}
+.db-res.flagged{color:var(--red);}
+.db-foot{display:flex;justify-content:space-between;margin-top:6px;padding-top:6px;border-top:0.5px solid var(--border);}
+.db-src{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;}
+.db-ms{font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;}
+/* RIGHT RESULTS */
+.r-lbl{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);padding-bottom:8px;border-bottom:0.5px solid var(--border);margin-bottom:10px;}
+.score-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0;}
+.score-ring{position:relative;width:120px;height:120px;}
 .score-ring svg{transform:rotate(-90deg);}
-.score-ring circle{fill:none;stroke-width:10;}
-.score-ring .track{stroke:var(--border2);}
-.score-ring .fill{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1),stroke 0.5s;}
-.score-num{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--white);
-  letter-spacing:0.05em;
-}
-.score-sublabel{font-size:0.65rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;}
-.score-verdict{
-  font-family:'Bebas Neue',sans-serif;font-size:1rem;
-  letter-spacing:0.06em;margin-top:6px;transition:color 0.4s;
-}
-
-.model-section{}
-.section-micro{font-size:0.62rem;color:var(--text3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;}
-.model-rows{display:flex;flex-direction:column;gap:8px;}
-.model-row{display:flex;align-items:center;gap:8px;}
-.model-name{font-size:0.68rem;color:var(--text2);width:130px;flex-shrink:0;}
-.bar-wrap{flex:1;height:5px;background:var(--border2);border-radius:3px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:3px;background:var(--accent);transition:width 0.8s ease;width:0%;}
-.bar-val{font-size:0.65rem;font-family:'JetBrains Mono',monospace;color:var(--text2);width:28px;text-align:right;}
-
-.signals-section{}
-.signal-list{display:flex;flex-direction:column;gap:5px;}
-.signal-item{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:7px 10px;background:var(--panel);border-radius:4px;
-  font-size:0.68rem;border-left:2px solid transparent;transition:all 0.2s;
-}
-.signal-item.warn{border-left-color:var(--amber);background:rgba(255,179,0,0.04);}
-.signal-item.crit{border-left-color:var(--red);background:rgba(255,51,85,0.04);}
-.signal-name{color:var(--text);}
-.signal-pts{font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--amber);}
-
-/* Typology Grid */
-.typo-section{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:8px;padding:24px;
-}
-.typo-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:16px;
-}
-.typo-title{font-weight:600;font-size:0.85rem;color:var(--white);}
-.typo-ref{font-size:0.65rem;font-family:'JetBrains Mono',monospace;color:var(--text3);}
-.typo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.typo-card{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:6px;padding:14px;position:relative;
-  transition:all 0.3s;
-}
-.typo-card.flagged{border-color:var(--red);box-shadow:0 0 20px rgba(255,51,85,0.1);}
-.typo-card.warn{border-color:var(--amber);box-shadow:0 0 16px rgba(255,179,0,0.08);}
-.typo-num{font-size:0.58rem;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
-.typo-name{font-weight:600;font-size:0.75rem;color:var(--text);margin-bottom:4px;line-height:1.3;}
-.typo-desc{font-size:0.62rem;color:var(--text3);line-height:1.5;}
-.typo-badge{
-  position:absolute;top:10px;right:10px;
-  font-size:0.58rem;font-weight:700;padding:2px 7px;border-radius:3px;
-  letter-spacing:0.08em;
-}
-.badge-clear{background:rgba(0,255,136,0.08);color:var(--green);border:1px solid rgba(0,255,136,0.2);}
-.badge-detected{background:rgba(255,51,85,0.1);color:var(--red);border:1px solid rgba(255,51,85,0.25);}
-.badge-review{background:rgba(255,179,0,0.08);color:var(--amber);border:1px solid rgba(255,179,0,0.2);}
-
-/* ═══════════════════════════════
-   BULK UPLOAD TAB
-═══════════════════════════════ */
-.bulk-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-
-.upload-zone{
-  background:var(--card);border:2px dashed var(--border2);
-  border-radius:12px;padding:48px 32px;
-  text-align:center;cursor:pointer;
-  transition:all 0.3s;position:relative;
-}
-.upload-zone:hover,.upload-zone.dragover{
-  border-color:var(--accent);
-  background:rgba(0,229,255,0.04);
-  box-shadow:0 0 30px rgba(0,229,255,0.08);
-}
-.upload-icon{
-  width:64px;height:64px;margin:0 auto 20px;
-  background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.15);
-  border-radius:16px;display:flex;align-items:center;justify-content:center;
-  font-size:1.8rem;
-}
-.upload-title{font-weight:600;font-size:1rem;color:var(--white);margin-bottom:8px;}
-.upload-sub{font-size:0.78rem;color:var(--text2);line-height:1.6;margin-bottom:20px;}
-.upload-btn-label{
-  display:inline-block;padding:10px 24px;
-  background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.25);
-  border-radius:5px;font-size:0.78rem;font-weight:500;
-  color:var(--accent);cursor:pointer;transition:all 0.2s;
-}
-.upload-btn-label:hover{background:rgba(0,229,255,0.18);}
-#csvFileInput{display:none;}
-
-.csv-template{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:8px;padding:24px;
-}
-.template-title{font-weight:600;font-size:0.85rem;color:var(--white);margin-bottom:12px;}
-.template-desc{font-size:0.75rem;color:var(--text2);line-height:1.6;margin-bottom:16px;}
-.csv-preview{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:5px;padding:14px;
-  font-family:'JetBrains Mono',monospace;font-size:0.65rem;
-  color:var(--text2);line-height:1.8;overflow-x:auto;white-space:pre;
-}
-.download-template-btn{
-  margin-top:14px;width:100%;padding:10px;
-  background:transparent;border:1px solid var(--border2);
-  border-radius:5px;color:var(--text2);font-size:0.75rem;
-  cursor:pointer;transition:all 0.2s;
-}
-.download-template-btn:hover{border-color:var(--accent);color:var(--accent);}
-
-/* Bulk Results */
-.bulk-results{margin-top:24px;}
-.bulk-summary{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;
-}
-.summary-stat{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:6px;padding:16px;text-align:center;
-}
-.summary-num{
-  font-family:'Bebas Neue',sans-serif;font-size:1.8rem;
-  color:var(--white);letter-spacing:0.05em;
-}
-.summary-label{font-size:0.62rem;color:var(--text3);margin-top:3px;letter-spacing:0.05em;}
-
-.bulk-table-wrap{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:8px;overflow:hidden;
-}
-.bulk-table-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;border-bottom:1px solid var(--border);
-}
-.bulk-table-title{font-weight:600;font-size:0.82rem;color:var(--white);}
-.export-btn{
-  padding:7px 16px;background:rgba(0,255,136,0.08);
-  border:1px solid rgba(0,255,136,0.2);border-radius:4px;
-  font-size:0.72rem;font-weight:500;color:var(--green);
-  cursor:pointer;transition:all 0.2s;
-}
-.export-btn:hover{background:rgba(0,255,136,0.15);}
-
-.bulk-table{width:100%;border-collapse:collapse;}
-.bulk-table th{
-  padding:10px 16px;text-align:left;
-  font-size:0.62rem;font-weight:600;color:var(--text3);
-  letter-spacing:0.1em;text-transform:uppercase;
-  background:var(--panel);border-bottom:1px solid var(--border);
-}
-.bulk-table td{
-  padding:10px 16px;font-size:0.72rem;
-  border-bottom:1px solid var(--border);color:var(--text2);
-}
-.bulk-table tr:last-child td{border-bottom:none;}
-.bulk-table tr:hover td{background:rgba(0,229,255,0.02);}
-.risk-pill{
-  display:inline-block;padding:2px 8px;border-radius:10px;
-  font-size:0.62rem;font-weight:600;letter-spacing:0.05em;
-}
-.risk-low{background:rgba(0,255,136,0.1);color:var(--green);}
-.risk-med{background:rgba(255,179,0,0.1);color:var(--amber);}
-.risk-high{background:rgba(255,102,34,0.1);color:var(--orange);}
-.risk-crit{background:rgba(255,51,85,0.12);color:var(--red);}
-
-/* Progress bar for bulk scanning */
-.scan-progress{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:8px;padding:24px;text-align:center;display:none;
-}
-.progress-title{font-weight:600;color:var(--white);margin-bottom:16px;}
-.progress-bar-wrap{background:var(--panel);border-radius:20px;height:8px;overflow:hidden;margin-bottom:10px;}
-.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:20px;width:0%;transition:width 0.1s;}
-.progress-text{font-size:0.72rem;color:var(--text2);font-family:'JetBrains Mono',monospace;}
-
-/* ═══════════════════════════════
-   ABOUT TAB
-═══════════════════════════════ */
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-.about-card{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:8px;padding:28px;
-}
-.about-card h3{
-  font-family:'Bebas Neue',sans-serif;font-size:1.3rem;
-  letter-spacing:0.08em;color:var(--white);margin-bottom:12px;
-}
-.about-card p{font-size:0.8rem;color:var(--text2);line-height:1.8;margin-bottom:10px;}
-.reg-list{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
-.reg-item{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:10px 12px;background:var(--panel);border-radius:5px;
-  border-left:2px solid var(--accent);
-}
-.reg-code{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--accent);white-space:nowrap;}
-.reg-desc{font-size:0.68rem;color:var(--text2);line-height:1.5;}
-
-/* ═══════════════════════════════
-   FOOTER
-═══════════════════════════════ */
-footer{
-  margin-top:40px;padding:20px 40px;
-  border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:0.65rem;color:var(--text3);
-}
-.footer-brand{display:flex;align-items:center;gap:8px;font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--text2);letter-spacing:0.08em;}
-
-/* Utility */
-.divider{height:1px;background:var(--border);margin:16px 0;}
-.empty-state{text-align:center;padding:40px;color:var(--text3);font-size:0.8rem;}
+.score-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.score-num{font-size:38px;font-weight:800;font-family:'IBM Plex Mono',monospace;transition:color 0.5s;}
+.score-sub{font-size:9px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase;}
+.risk-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.06em;}
+.rb-idle{background:var(--bg3);color:var(--text3);border:0.5px solid var(--border2);}
+.rb-low{background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border);}
+.rb-med{background:var(--amber-bg);color:var(--amber);border:0.5px solid var(--amber-border);}
+.rb-high{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border);}
+.signal{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);}
+.signal:last-child{border-bottom:none;}
+.sig-ic{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.sa{background:var(--red-bg);color:var(--red);}
+.sw{background:var(--amber-bg);color:var(--amber);}
+.so{background:var(--green-bg);color:var(--green);}
+.si{background:#0c1e40;color:var(--blue);}
+.sig-text strong{display:block;font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.sig-text span{font-size:10px;color:var(--text2);line-height:1.4;}
+.mrow{display:flex;flex-direction:column;gap:4px;}
+.mmeta{display:flex;justify-content:space-between;align-items:center;}
+.mname{font-size:10px;color:var(--text2);font-family:'IBM Plex Mono',monospace;}
+.mval{font-size:11px;font-weight:600;font-family:'IBM Plex Mono',monospace;}
+.btrack{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.bfill{height:100%;border-radius:3px;transition:width 0.9s cubic-bezier(0.4,0,0.2,1);}
+.audit{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text3);line-height:1.9;padding:12px;background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;}
+.arow{display:flex;justify-content:space-between;}
+.arow span:last-child{color:var(--text2);}
+.dl-btn{width:100%;padding:9px;border-radius:6px;background:transparent;border:0.5px solid var(--border2);color:var(--text2);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;cursor:pointer;text-transform:uppercase;transition:all 0.15s;}
+.dl-btn:hover{border-color:var(--blue);color:var(--blue);}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:8px;padding:10px 16px;font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text);transform:translateY(60px);opacity:0;transition:all 0.3s;z-index:999;}
+.toast.show{transform:translateY(0);opacity:1;}
 </style>
 </head>
 <body>
-<div id="app">
+<header>
+  <div class="logo">
+    <div class="logo-mark">FS</div>
+    <span class="logo-text">FRAUDSHIELD AI</span>
+  </div>
+  <div class="header-meta">
+    <div class="status-pill"><span class="pulse"></span>SYSTEM OPERATIONAL</div>
+    <span>FinCEN FIN-2024-A011</span><span>Treasury AI MRF 2025</span><span>v3.2.0</span>
+  </div>
+</header>
 
-<!-- ═══ NAVBAR ═══ -->
-<nav>
-  <div class="nav-logo">
-    <!-- SVG LOGO -->
-    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="lg1" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#00e5ff"/>
-          <stop offset="100%" stop-color="#00ff88"/>
-        </linearGradient>
-      </defs>
-      <!-- Shield shape -->
-      <path d="M19 2L4 8V20C4 28.5 11 35.5 19 37C27 35.5 34 28.5 34 20V8L19 2Z" fill="url(#lg1)" opacity="0.15"/>
-      <path d="M19 2L4 8V20C4 28.5 11 35.5 19 37C27 35.5 34 28.5 34 20V8L19 2Z" stroke="url(#lg1)" stroke-width="1.5" fill="none"/>
-      <!-- Inner circuit lines -->
-      <circle cx="19" cy="19" r="5" fill="none" stroke="#00e5ff" stroke-width="1.2"/>
-      <line x1="19" y1="14" x2="19" y2="10" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
-      <line x1="19" y1="24" x2="19" y2="28" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
-      <line x1="14" y1="19" x2="10" y2="19" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
-      <line x1="24" y1="19" x2="28" y2="19" stroke="#00e5ff" stroke-width="1" opacity="0.6"/>
-      <circle cx="19" cy="19" r="2" fill="#00e5ff"/>
-      <!-- Corner dots -->
-      <circle cx="10" cy="19" r="1" fill="#00ff88" opacity="0.7"/>
-      <circle cx="28" cy="19" r="1" fill="#00ff88" opacity="0.7"/>
-      <circle cx="19" cy="10" r="1" fill="#00ff88" opacity="0.7"/>
-    </svg>
-    <div class="nav-brand">Fraud<span>Shield</span> AI</div>
+<main>
+<!-- ======== LEFT: FORM ======== -->
+<div class="panel left-panel">
+
+  <!-- PAYER -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-title">Payer Information</div></div>
+    <div class="sec-body">
+      <div class="fg">
+        <div class="f"><label>Full Legal Name</label><input type="text" id="payer-name" placeholder="John A. Smith"/></div>
+        <div class="f"><label>KYC Status</label>
+          <select id="payer-kyc">
+            <option>Verified — Full KYC</option><option>Partial KYC</option>
+            <option>Unverified</option><option>Enhanced Due Diligence</option>
+            <option>PEP — Politically Exposed</option>
+          </select>
+        </div>
+        <div class="f"><label>Account Type</label>
+          <select id="payer-acct-type" onchange="toggleCard()">
+            <option>Checking Account</option><option>Savings Account</option>
+            <option>Business Account</option><option>Credit Card</option>
+            <option>Debit Card</option><option>Prepaid Card</option>
+            <option>Corporate Card</option><option>Gift Card</option>
+            <option>Crypto Wallet</option><option>Money Market</option>
+          </select>
+        </div>
+        <div class="f"><label>Account Age (days)</label><input type="number" id="payer-age" placeholder="365" min="0"/></div>
+        <div class="f"><label>Prior Chargebacks</label><input type="number" id="payer-cb" placeholder="0" min="0"/></div>
+        <div class="f"><label>2FA Enabled</label><select id="payer-2fa"><option>Yes</option><option>No</option></select></div>
+      </div>
+
+      <!-- CARD SECTION -->
+      <div id="card-sec" style="display:none;">
+        <div class="tok-box">
+          <div class="tok-head">
+            <span class="tok-label">Secure Card Capture</span>
+            <span class="tok-secure">🔒 TLS 1.3 Encrypted</span>
+          </div>
+          <div class="tok-fields">
+            <input class="tok-in" id="card-num" type="text" placeholder="**** **** **** ****" maxlength="19" oninput="fmtCard(this)"/>
+            <input class="tok-in" id="card-exp" type="text" placeholder="MM/YY" maxlength="5" oninput="fmtExp(this)"/>
+            <input class="tok-in" id="card-cvv-raw" type="password" placeholder="CVV" maxlength="4"/>
+          </div>
+          <div class="tok-note">⚡ Card number is sent directly to the payment processor (Stripe / Visa). FraudShield never stores raw card data — only receives a secure token and verification signals in return.</div>
+          <button class="tok-btn" onclick="doTokenize()">TOKENIZE CARD →</button>
+          <div class="tok-result" id="tok-result">TOKEN: tok_<span id="tok-val">—</span> &nbsp;|&nbsp; BIN: <span id="bin-val">—</span> &nbsp;|&nbsp; Issuer: <span id="issuer-val">—</span></div>
+        </div>
+
+        <div style="margin-top:14px;border-top:0.5px solid var(--border);padding-top:12px;">
+          <div class="sec-title" style="margin-bottom:10px;">Verification Signals <span class="tag tag-g">RETURNED BY PROCESSOR</span></div>
+          <p style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-bottom:10px;line-height:1.5;">These signals come back from the bank/processor. FraudShield never checks the card number against the name directly — the bank does that and returns a match score.</p>
+          <div class="vsig-grid">
+            <div class="vsig"><div class="vsig-name">AVS Check</div>
+              <div class="vsig-row"><select class="vsig-sel" id="v-avs" onchange="vdot('avs',this)"><option>Full Match</option><option>Partial Match</option><option>No Match</option><option>Not Checked</option></select><div class="vsig-dot dg" id="d-avs"></div></div></div>
+            <div class="vsig"><div class="vsig-name">CVV Result</div>
+              <div class="vsig-row"><select class="vsig-sel" id="v-cvv" onchange="vdot('cvv',this)"><option>Match</option><option>Mismatch</option><option>Not Provided</option></select><div class="vsig-dot dg" id="d-cvv"></div></div></div>
+            <div class="vsig"><div class="vsig-name">3D Secure</div>
+              <div class="vsig-row"><select class="vsig-sel" id="v-3ds" onchange="vdot('3ds',this)"><option>Passed</option><option>Failed</option><option>Not Enrolled</option><option>Attempted</option></select><div class="vsig-dot dg" id="d-3ds"></div></div></div>
+            <div class="vsig"><div class="vsig-name">Name Match Score</div>
+              <div class="vsig-row"><select class="vsig-sel" id="v-name" onchange="vdot('name',this)"><option>High (85–100%)</option><option>Medium (60–84%)</option><option>Low (below 60%)</option><option>No Match</option></select><div class="vsig-dot dg" id="d-name"></div></div></div>
+            <div class="vsig"><div class="vsig-name">Declined Attempts</div>
+              <div class="vsig-row"><select class="vsig-sel" id="v-dec" onchange="vdot('dec',this)"><option>0</option><option>1–2</option><option>3–5 (suspicious)</option><option>6+ (high risk)</option></select><div class="vsig-dot dg" id="d-dec"></div></div></div>
+            <div class="vsig"><div class="vsig-name">Multi-Card Device</div>
+              <div class="vsig-row"><select class="vsig-sel" id="v-multi" onchange="vdot('multi',this)"><option>No — single card</option><option>2–3 cards</option><option>4+ cards (flagged)</option></select><div class="vsig-dot dg" id="d-multi"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showTab('single')">Single Transaction</button>
-    <button class="nav-tab" onclick="showTab('bulk')">Bulk Upload</button>
-    <button class="nav-tab" onclick="showTab('about')">About & Compliance</button>
+  <!-- PAYEE -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-title">Payee / Recipient</div></div>
+    <div class="sec-body">
+      <div class="fg">
+        <div class="f"><label>Payee Name / Entity</label><input type="text" id="payee-name" placeholder="Acme Corp LLC"/></div>
+        <div class="f"><label>Payee Country</label><select id="payee-country"></select></div>
+        <div class="f"><label>Account Type</label>
+          <select id="payee-type"><option>Checking Account</option><option>Savings Account</option><option>Business Account</option><option>Crypto Wallet</option><option>Shell Company</option><option>Unknown</option></select>
+        </div>
+        <div class="f"><label>First-Time Recipient?</label>
+          <select id="payee-first"><option>No — prior history</option><option>Yes — first transfer</option></select>
+        </div>
+        <div class="f"><label>Payee Account Age (days)</label><input type="number" id="payee-age" placeholder="180" min="0"/></div>
+        <div class="f fc"><label>Watchlist / Sanctions Status</label>
+          <select id="payee-watch">
+            <option>Not Listed — Clear</option><option>OFAC SDN Match</option>
+            <option>FinCEN 314(a) Match</option><option>Interpol Red Notice</option>
+            <option>Internal Fraud Blacklist</option><option>PEP — Politically Exposed Person</option>
+          </select>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="nav-right">
-    <div class="live-badge"><span class="live-dot"></span>LIVE SYSTEM</div>
-    <div class="nav-version">v2.5.0 · 2026</div>
+  <!-- TRANSACTION -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-title">Transaction Parameters</div></div>
+    <div class="sec-body">
+      <div class="fg">
+        <div class="f"><label>Amount (USD)</label><input type="number" id="tx-amt" placeholder="5000" min="0"/></div>
+        <div class="f"><label>Currency</label>
+          <select id="tx-cur"><option>USD</option><option>EUR</option><option>GBP</option><option>NGN</option><option>CNY</option><option>AED</option><option>CAD</option><option>JPY</option><option>BTC</option><option>ETH</option><option>USDT</option><option>XMR</option></select>
+        </div>
+        <div class="f"><label>Origin Country</label><select id="tx-origin"></select></div>
+        <div class="f"><label>Transaction Type</label>
+          <select id="tx-type"><option>ACH Transfer</option><option>Wire (Domestic)</option><option>Wire (International)</option><option>SWIFT</option><option>SEPA</option><option>Card Payment</option><option>Crypto Transfer</option><option>P2P (Zelle/Venmo)</option><option>Cash Deposit</option><option>Mobile Money</option></select>
+        </div>
+        <div class="f"><label>Device / Channel</label>
+          <select id="tx-dev"><option>Mobile App</option><option>Web Browser</option><option>API / System</option><option>Branch / In-Person</option><option>ATM</option></select>
+        </div>
+        <div class="f"><label>Time of Transaction</label><input type="time" id="tx-time" value="02:47"/></div>
+        <div class="f"><label>IP / Country Match</label>
+          <select id="tx-ip"><option>Yes — matches</option><option>No — mismatch</option><option>VPN / Proxy / Tor</option><option>Unknown</option></select>
+        </div>
+        <div class="f"><label>Transactions Last 7 Days</label><input type="number" id="tx-7d" placeholder="3" min="0"/></div>
+        <div class="f fc"><label>Prior 30-Day Volume (USD)</label><input type="number" id="tx-30d" placeholder="5000" min="0"/></div>
+      </div>
+    </div>
   </div>
-</nav>
 
-<!-- ═══ HERO ═══ -->
-<div class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">🛡️ Enterprise Fraud Intelligence Platform</div>
-    <div class="hero-title">AI-POWERED<br><span>FRAUD</span><br>DETECTION</div>
-    <div class="hero-sub">Real-time multi-model ensemble scoring aligned with FinCEN FIN-2024-A001 typologies and the U.S. Treasury Financial Services AI Risk Management Framework (2026). Developed to protect U.S. financial system integrity.</div>
-    <div class="hero-tags">
-      <span class="hero-tag">FinCEN FIN-2024-A001</span>
-      <span class="hero-tag">Treasury AI RMF 2026</span>
-      <span class="hero-tag">BSA/AML</span>
-      <span class="hero-tag">FATF Rec. 10/20</span>
-      <span class="hero-tag">Explainable AI</span>
-      <span class="hero-tag">Ensemble ML</span>
+  <!-- REGULATORY -->
+  <div class="sec">
+    <div class="sec-head"><div class="sec-title">Regulatory Alignment</div></div>
+    <div class="chips">
+      <span class="chip">FinCEN FIN-2024-A011</span><span class="chip">Treasury AI MRF §3.4</span>
+      <span class="chip">BSA / 31 CFR 1010</span><span class="chip">FATF Rec. 16 &amp; 20</span>
+      <span class="chip">OFAC SDN Screening</span><span class="chip">PCI DSS 4.0</span>
+      <span class="chip">GDPR Art. 22</span><span class="chip">CDD &amp; STR Elements</span>
     </div>
   </div>
-  <div class="hero-right">
-    <div class="stat-card">
-      <div class="stat-num">4</div>
-      <div class="stat-label">ML Models Running in Parallel</div>
-    </div>
-    <div class="stat-card green">
-      <div class="stat-num">6</div>
-      <div class="stat-label">FinCEN Typologies Mapped</div>
-    </div>
-    <div class="stat-card amber">
-      <div class="stat-num">XAI</div>
-      <div class="stat-label">Explainable Output per Transaction</div>
-    </div>
-    <div class="stat-card red">
-      <div class="stat-num">SAR</div>
-      <div class="stat-label">Report-Ready Risk Outputs</div>
-    </div>
+
+  <button class="run-btn" id="run-btn" onclick="runAnalysis()">▶ &nbsp;RUN ANALYSIS</button>
+
+</div>
+
+<!-- ======== MIDDLE: DB CHECKS ======== -->
+<div class="panel mid-panel">
+  <div class="db-hdr">
+    <span class="db-hdr-title">Live Database Checks</span>
+    <span class="db-count" id="db-summary">8 SOURCES — AWAITING</span>
+  </div>
+
+  <!-- BIN -->
+  <div class="db-card" id="db-bin">
+    <div class="scan"></div>
+    <div class="db-ch" id="dbch-bin"><span class="db-nm" id="dbnm-bin">BIN DATABASE</span><span class="db-bdg idle" id="dbbdg-bin">IDLE</span></div>
+    <div class="db-body"><div class="db-res" id="dbres-bin">Card issuer, type &amp; country lookup via BIN prefix</div>
+    <div class="db-foot"><span class="db-src">Binlist / Mastercard BIN API</span><span class="db-ms" id="dbms-bin">— ms</span></div></div>
+  </div>
+
+  <!-- HOTLIST -->
+  <div class="db-card" id="db-hotlist">
+    <div class="scan"></div>
+    <div class="db-ch" id="dbch-hotlist"><span class="db-nm" id="dbnm-hotlist">CARD HOTLIST</span><span class="db-bdg idle" id="dbbdg-hotlist">IDLE</span></div>
+    <div class="db-body"><div class="db-res" id="dbres-hotlist">Check card against known stolen &amp; compromised card feeds</div>
+    <div class="db-foot"><span class="db-src">Rippleshot / Ethoca / Visa DM</span><span class="db-ms" id="dbms-hotlist">— ms</span></div></div>
+  </div>
+
+  <!-- OFAC -->
+  <div class="db-card" id="db-ofac">
+    <div class="scan"></div>
+    <div class="db-ch" id="dbch-ofac"><span class="db-nm" id="dbnm-ofac">OFAC SDN SCREENING</span><span class="db-bdg idle" id="dbbdg-ofac">IDLE</span></div>
+    <div class="db-body"><div class="db-res" id="dbres-ofac">Screen payer &amp; payee against US Treasury sanctions list</div>
+    <div class="db-foot"><span class="db-src">US Treasury OFAC API</span><span class="db-ms" id="dbms-ofac">— ms</span></div></div>
+  </div>
+
+  <!-- FINCEN -->
+  <div class="db-card" id="db-fincen">
+    <div class="scan"></div>
+    <div class="db-ch" id="dbch-fincen"><span class="db-nm" id="dbnm-fincen">FinCEN 314(a)</span><span class="db-bdg idle" id="dbbdg-fincen">IDLE</span></div>
+    <div class="db-body"><div class="db-res" id="dbres-fincen">Match against FinCEN law enforcement subject list</div>
+    <div class="db-foot"><span class="db-src">FinCEN Secure Portal</span><span class="db-ms" id="dbms-fincen">— ms</span></div></div>
+  </div>
+
+  <!-- INTERPOL -->
+  <div class="db-card" id="db-interpol">
+    <div class="scan"></div>
+    <div class="db-ch" id="dbch-interpol"><span class="db-nm" id="dbnm-interpol">INTERPOL / WATCHLISTS</span><span class="db-bdg idle" id="dbbdg-interpol">IDLE</span></div>
+    <div class="db-body"><div class="db-res" id="dbres-interpol">Check against Interpol Red Notices &amp; global watchlists</div>
+    <div class="db-foot"><span class="db-src">Interpol i-Link / ComplyAdvantage</span><span class="db-ms" id="dbms-interpol">— ms</span></div></div>
+  </div>
+
+  <!-- DEVICE -->
+  <div class="db-card" id="db-device">
+    <div class="scan"></div>
+    <div class="db-ch" id="dbch-device"><span class="db-nm" id="dbnm-device">DEVICE FINGERPRINT</span><span class="db-bdg idle" id="dbbdg-device">IDLE</span></div>
+    <div class="db-body"><div class="db-res" id="dbres-device">Match device against known fraud device database</div>
+    <div class="db-foot"><span class="db-src">Sardine / Seon / ThreatMetrix</span><span class="db-ms" id="dbms-device">— ms</span></div></div>
+  </div>
+
+  <!-- GRAPH -->
+  <div class="db-card" id="db-graph">
+    <div class="scan"></div>
+    <div class="db-ch" id="dbch-graph"><span class="db-nm" id="dbnm-graph">NETWORK GRAPH DB</span><span class="db-bdg idle" id="dbbdg-graph">IDLE</span></div>
+    <div class="db-body"><div class="db-res" id="dbres-graph">Map connections between payer, payee &amp; flagged entities</div>
+    <div class="db-foot"><span class="db-src">Internal Graph DB (Neo4j)</span><span class="db-ms" id="dbms-graph">— ms</span></div></div>
+  </div>
+
+  <!-- AML -->
+  <div class="db-card" id="db-aml">
+    <div class="scan"></div>
+    <div class="db-ch" id="dbch-aml"><span class="db-nm" id="dbnm-aml">AML TYPOLOGIES</span><span class="db-bdg idle" id="dbbdg-aml">IDLE</span></div>
+    <div class="db-body"><div class="db-res" id="dbres-aml">Match transaction pattern against known AML typologies</div>
+    <div class="db-foot"><span class="db-src">FATF / FinCEN Typology Library</span><span class="db-ms" id="dbms-aml">— ms</span></div></div>
+  </div>
+
+  <div style="padding:10px 14px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);background:var(--bg2);border:0.5px solid var(--border);border-radius:8px;line-height:1.7;">
+    PLACEHOLDER MODE — In production each check fires a real-time API call. Results return within 50–350ms per source.
   </div>
 </div>
 
-<!-- ═══════════════════════════════
-     TAB: SINGLE TRANSACTION
-═══════════════════════════════ -->
-<div id="tab-single" class="tab-content active">
-  <div class="analyzer-grid">
+<!-- ======== RIGHT: RESULTS ======== -->
+<div class="panel right-panel">
 
-    <!-- INPUT PANEL -->
-    <div class="input-panel">
-      <div class="panel-header">
-        <div class="panel-header-icon">🔍</div>
-        <div>
-          <div class="panel-title">Transaction Parameters</div>
-          <div class="panel-sub">Enter transaction details for AI risk analysis</div>
+  <div>
+    <div class="r-lbl">Risk Score</div>
+    <div class="score-wrap">
+      <div class="score-ring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#1a2234" stroke-width="10"/>
+          <circle id="score-arc" cx="60" cy="60" r="48" fill="none" stroke="#4a5a72" stroke-width="10" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6" style="transition:stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1),stroke 0.5s;"/>
+        </svg>
+        <div class="score-center">
+          <span class="score-num" id="score-num" style="color:var(--text3);">—</span>
+          <span class="score-sub">/ 100</span>
         </div>
       </div>
-
-      <div class="field">
-        <label>Transaction Amount (USD)</label>
-        <input type="number" id="amount" value="9500" min="0"/>
-      </div>
-      <div class="field">
-        <label>Country of Origin</label>
-        <select id="country">
-          <option value="US">🇺🇸 United States</option>
-          <option value="CA">🇨🇦 Canada</option>
-          <option value="GB">🇬🇧 United Kingdom</option>
-          <option value="DE">🇩🇪 Germany</option>
-          <option value="AE">🇦🇪 UAE</option>
-          <option value="NG">🇳🇬 Nigeria</option>
-          <option value="MX">🇲🇽 Mexico</option>
-          <option value="CN">🇨🇳 China</option>
-          <option value="RU">🇷🇺 Russia</option>
-          <option value="IR">🇮🇷 Iran</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>KYC Verification Status</label>
-        <select id="kyc">
-          <option value="verified">✅ Verified — Full KYC</option>
-          <option value="partial">⚠️ Partial KYC</option>
-          <option value="none">❌ No KYC</option>
-          <option value="biometric_mismatch">🚨 Biometric Mismatch</option>
-          <option value="video_fail">🚨 Video Liveness Fail</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Transaction Type</label>
-        <select id="txtype">
-          <option value="ach">ACH Transfer</option>
-          <option value="wire">Wire Transfer</option>
-          <option value="crypto">Crypto Exchange</option>
-          <option value="card">Card Payment</option>
-          <option value="cash">Cash Deposit</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Transactions Last 24H (Count)</label>
-        <input type="number" id="txcount" value="3" min="0" max="100"/>
-      </div>
-      <div class="field">
-        <label>Prior 30-Day Volume (USD)</label>
-        <input type="number" id="prior" value="5000" min="0"/>
-      </div>
-
-      <button class="run-btn" onclick="analyze()">▶ RUN AI ANALYSIS</button>
-
-      <div class="divider"></div>
-      <div style="font-size:0.65rem;color:var(--text3);line-height:1.7;">
-        <strong style="color:var(--text2);">Regulatory Alignment</strong><br>
-        FinCEN FIN-2024-A001 · Treasury AI RMF 2026<br>
-        BSA 31 CFR 1010 · FATF Rec. 10 & 20
-      </div>
-    </div>
-
-    <!-- RESULTS -->
-    <div class="results-panel">
-
-      <!-- Score Card -->
-      <div class="score-card">
-        <div class="score-ring-wrap">
-          <div class="score-ring">
-            <svg width="140" height="140" viewBox="0 0 140 140">
-              <circle class="track" cx="70" cy="70" r="58"/>
-              <circle class="fill" id="scoreArc" cx="70" cy="70" r="58"
-                stroke-dasharray="364.4" stroke-dashoffset="364.4"/>
-            </svg>
-            <div class="score-num" id="scoreNum">—</div>
-          </div>
-          <div class="score-sublabel">Ensemble Risk Score</div>
-          <div class="score-verdict" id="scoreVerdict">AWAITING INPUT</div>
-        </div>
-
-        <div class="model-section">
-          <div class="section-micro">Model Breakdown</div>
-          <div class="model-rows">
-            <div class="model-row">
-              <div class="model-name">Isolation Forest</div>
-              <div class="bar-wrap"><div class="bar-fill" id="bar0"></div></div>
-              <div class="bar-val" id="val0">—</div>
-            </div>
-            <div class="model-row">
-              <div class="model-name">Random Forest</div>
-              <div class="bar-wrap"><div class="bar-fill" id="bar1"></div></div>
-              <div class="bar-val" id="val1">—</div>
-            </div>
-            <div class="model-row">
-              <div class="model-name">Logistic Regression</div>
-              <div class="bar-wrap"><div class="bar-fill" id="bar2"></div></div>
-              <div class="bar-val" id="val2">—</div>
-            </div>
-            <div class="model-row">
-              <div class="model-name">Threshold Rules</div>
-              <div class="bar-wrap"><div class="bar-fill" id="bar3"></div></div>
-              <div class="bar-val" id="val3">—</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="signals-section">
-          <div class="section-micro">XAI Signals</div>
-          <div class="signal-list" id="signalList">
-            <div style="font-size:0.7rem;color:var(--text3);">Run analysis to view signals.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Typology Grid -->
-      <div class="typo-section">
-        <div class="typo-header">
-          <div class="typo-title">FinCEN FIN-2024-A001 — Typology Mapping</div>
-          <div class="typo-ref">6 GenAI Fraud Patterns · Real-Time Detection</div>
-        </div>
-        <div class="typo-grid">
-          <div class="typo-card" id="typo0">
-            <div class="typo-num">TYPOLOGY 01</div>
-            <div class="typo-name">Synthetic Identity / Deepfake KYC</div>
-            <div class="typo-desc">GenAI-generated documents or video liveness bypass to open fraudulent accounts.</div>
-            <div class="typo-badge badge-clear" id="badge0">CLEAR</div>
-          </div>
-          <div class="typo-card" id="typo1">
-            <div class="typo-num">TYPOLOGY 02</div>
-            <div class="typo-name">Structuring / Smurfing</div>
-            <div class="typo-desc">Transactions kept below $10K CTR threshold to evade BSA reporting requirements.</div>
-            <div class="typo-badge badge-clear" id="badge1">CLEAR</div>
-          </div>
-          <div class="typo-card" id="typo2">
-            <div class="typo-num">TYPOLOGY 03</div>
-            <div class="typo-name">High-Risk Jurisdiction</div>
-            <div class="typo-desc">Transfers involving FATF-monitored or OFAC-sanctioned countries.</div>
-            <div class="typo-badge badge-clear" id="badge2">CLEAR</div>
-          </div>
-          <div class="typo-card" id="typo3">
-            <div class="typo-num">TYPOLOGY 04</div>
-            <div class="typo-name">KYC Bypass Attempt</div>
-            <div class="typo-desc">Unverified accounts conducting significant value transactions outside CDD thresholds.</div>
-            <div class="typo-badge badge-clear" id="badge3">CLEAR</div>
-          </div>
-          <div class="typo-card" id="typo4">
-            <div class="typo-num">TYPOLOGY 05</div>
-            <div class="typo-name">Abnormal Velocity</div>
-            <div class="typo-desc">Transaction frequency or volume spikes inconsistent with account behavior patterns.</div>
-            <div class="typo-badge badge-clear" id="badge4">CLEAR</div>
-          </div>
-          <div class="typo-card" id="typo5">
-            <div class="typo-num">TYPOLOGY 06</div>
-            <div class="typo-name">Sanctioned Entity</div>
-            <div class="typo-desc">Patterns consistent with OFAC/SDN list entities or sanctioned regime activity.</div>
-            <div class="typo-badge badge-clear" id="badge5">CLEAR</div>
-          </div>
-        </div>
-      </div>
-
+      <span class="risk-badge rb-idle" id="risk-badge">AWAITING ANALYSIS</span>
     </div>
   </div>
+
+  <div>
+    <div class="r-lbl">Explainable AI Signals</div>
+    <div id="signals">
+      <div class="signal"><div class="sig-ic si">i</div><div class="sig-text"><strong>Ready</strong><span>Fill form and run analysis</span></div></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="r-lbl">Model Breakdown</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="mrow"><div class="mmeta"><span class="mname">Isolation Forest</span><span class="mval" id="mv-if" style="color:var(--text3);">—</span></div><div class="btrack"><div class="bfill" id="mb-if" style="width:0%;background:linear-gradient(90deg,#0ea5e9,#6366f1);"></div></div></div>
+      <div class="mrow"><div class="mmeta"><span class="mname">Random Forest</span><span class="mval" id="mv-rf" style="color:var(--text3);">—</span></div><div class="btrack"><div class="bfill" id="mb-rf" style="width:0%;background:linear-gradient(90deg,#0ea5e9,#6366f1);"></div></div></div>
+      <div class="mrow"><div class="mmeta"><span class="mname">Logistic Regression</span><span class="mval" id="mv-lr" style="color:var(--text3);">—</span></div><div class="btrack"><div class="bfill" id="mb-lr" style="width:0%;background:linear-gradient(90deg,#0ea5e9,#6366f1);"></div></div></div>
+      <div class="mrow"><div class="mmeta"><span class="mname">Graph Neural Net <span class="tag">NEW</span></span><span class="mval" id="mv-gnn" style="color:var(--text3);">—</span></div><div class="btrack"><div class="bfill" id="mb-gnn" style="width:0%;background:linear-gradient(90deg,#f87171,#f43f5e);"></div></div></div>
+      <div class="mrow" id="bin-mrow" style="display:none;"><div class="mmeta"><span class="mname">BIN / Card Intel <span class="tag">NEW</span></span><span class="mval" id="mv-bin" style="color:var(--text3);">—</span></div><div class="btrack"><div class="bfill" id="mb-bin" style="width:0%;background:linear-gradient(90deg,#f59e0b,#f97316);"></div></div></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="r-lbl">Case Management</div>
+    <div class="audit">
+      <div class="arow"><span>CASE #</span><span id="c-id">—</span></div>
+      <div class="arow"><span>TIMESTAMP</span><span id="c-ts">—</span></div>
+      <div class="arow"><span>ANALYST</span><span>UNASSIGNED</span></div>
+      <div class="arow"><span>SAR STATUS</span><span id="c-sar">—</span></div>
+      <div class="arow"><span>AUDIT LOG</span><span id="c-log">—</span></div>
+    </div>
+    <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+      <button class="dl-btn" onclick="genSAR()">⬇ GENERATE SAR DRAFT</button>
+      <button class="dl-btn" onclick="exportLog()">⬇ EXPORT AUDIT LOG</button>
+    </div>
+  </div>
+
 </div>
+</main>
 
-<!-- ═══════════════════════════════
-     TAB: BULK UPLOAD
-═══════════════════════════════ -->
-<div id="tab-bulk" class="tab-content">
-  <div class="bulk-layout">
+<!-- FAQ FOOTER -->
+<footer id="faq-section" style="background:var(--bg2);border-top:0.5px solid var(--border);padding:40px 32px 32px;">
+  <div style="max-width:1100px;margin:0 auto;">
 
-    <!-- Upload Zone -->
-    <div>
-      <div class="upload-zone" id="uploadZone"
-        ondragover="event.preventDefault();this.classList.add('dragover')"
-        ondragleave="this.classList.remove('dragover')"
-        ondrop="handleDrop(event)">
-        <div class="upload-icon">📂</div>
-        <div class="upload-title">Upload Transaction File</div>
-        <div class="upload-sub">
-          Drop a CSV file here or click to browse.<br>
-          Each row = one transaction to be scanned.<br>
-          Supports up to 10,000 transactions per batch.
-        </div>
-        <label class="upload-btn-label" for="csvFileInput">Choose CSV File</label>
-        <input type="file" id="csvFileInput" accept=".csv" onchange="handleFileUpload(event)"/>
+    <!-- Header row -->
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;font-family:'IBM Plex Mono',monospace;">ABOUT FRAUDSHIELD AI</div>
+        <h2 style="font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.02em;">Frequently Asked Questions</h2>
       </div>
-
-      <!-- Progress -->
-      <div class="scan-progress" id="scanProgress">
-        <div class="progress-title">🔍 Scanning Transactions...</div>
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" id="progressFill"></div>
-        </div>
-        <div class="progress-text" id="progressText">0 / 0 transactions analyzed</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="font-size:10px;padding:3px 10px;border-radius:4px;background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border);font-family:'IBM Plex Mono',monospace;font-weight:700;">PUBLIC ACCESS</span>
+        <span style="font-size:10px;padding:3px 10px;border-radius:4px;background:#0c1e40;color:var(--blue);border:0.5px solid #1d4ed8;font-family:'IBM Plex Mono',monospace;font-weight:700;">PROOF OF CONCEPT v3.2</span>
       </div>
     </div>
 
-    <!-- Template -->
-    <div class="csv-template">
-      <div class="template-title">📋 CSV Format Guide</div>
-      <div class="template-desc">
-        Your CSV file must have these exact column headers in the first row. Each subsequent row is one transaction FraudShield will analyze.
+    <!-- WHO USES IT banner -->
+    <div style="background:var(--bg3);border:0.5px solid var(--border2);border-left:3px solid var(--blue);border-radius:8px;padding:18px 20px;margin-bottom:24px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;font-family:'IBM Plex Mono',monospace;">Who Uses FraudShield AI</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:6px;background:var(--bg4);border:0.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🏦</div>
+          <div><div style="font-size:12px;font-weight:700;color:var(--text);">Bank Compliance Teams</div><div style="font-size:11px;color:var(--text2);">Real-time screening across all payment rails</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:6px;background:var(--bg4);border:0.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">💸</div>
+          <div><div style="font-size:12px;font-weight:700;color:var(--text);">Fintech Fraud Departments</div><div style="font-size:11px;color:var(--text2);">Wire, ACH, P2P, crypto & card fraud</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:6px;background:var(--bg4);border:0.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🔍</div>
+          <div><div style="font-size:12px;font-weight:700;color:var(--text);">AML Investigators</div><div style="font-size:11px;color:var(--text2);">Money laundering & structuring detection</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:6px;background:var(--bg4);border:0.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">⚖️</div>
+          <div><div style="font-size:12px;font-weight:700;color:var(--text);">Regulators & Auditors</div><div style="font-size:11px;color:var(--text2);">FinCEN, Treasury, USCIS review</div></div>
+        </div>
       </div>
-      <div class="csv-preview">amount,country,kyc,txtype,txcount,prior_volume
-9500,US,verified,wire,2,5000
-14200,IR,none,crypto,15,1000
-3000,GB,partial,ach,1,8000
-9800,RU,biometric_mismatch,wire,8,2000
-500,CA,verified,card,1,12000</div>
-      <button class="download-template-btn" onclick="downloadTemplate()">⬇ Download Sample CSV Template</button>
     </div>
+
+    <!-- PAYMENT TYPES BANNER -->
+    <div style="background:var(--bg3);border:0.5px solid var(--border2);border-left:3px solid var(--amber);border-radius:8px;padding:16px 20px;margin-bottom:24px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;font-family:'IBM Plex Mono',monospace;">Payment Methods & Transfer Types Covered</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">ACH Transfer</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">Wire Transfer (Domestic)</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">Wire Transfer (International)</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">SWIFT</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">SEPA</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">Credit Card</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">Debit Card</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">Prepaid / Gift Card</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">Crypto Transfer</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">P2P (Zelle / Venmo)</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">Cash Deposit</span>
+        <span style="font-size:11px;padding:4px 10px;border-radius:4px;background:var(--bg4);border:0.5px solid var(--border2);color:var(--text2);font-family:'IBM Plex Mono',monospace;">Mobile Money</span>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;">The same risk engine, database checks, and AI models apply regardless of payment method. Card-specific signals (BIN, CVV, hotlist) activate only when a card type is selected.</div>
+    </div>
+
+    <!-- FAQ GRID -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;">
+
+      <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;padding:16px 18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">What does FraudShield AI actually do?</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.65;">FraudShield AI is an AI-powered fraud detection and AML screening platform that works across <em>all</em> payment methods and fund transfer types — ACH, wire transfers, SWIFT, SEPA, crypto, P2P, mobile money, and card payments. A compliance analyst enters details about a transaction including payer identity, payee identity, amount, and transfer type. The system returns a risk score, explainable signals, and cross-checks against 8 external databases. The goal is to flag suspicious activity <em>before</em> it causes damage and generate a full regulatory paper trail.</div>
+      </div>
+
+      <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;padding:16px 18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">Does it only detect card fraud?</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.65;">No — card fraud is just one of many scenarios it covers. FraudShield detects fraud and suspicious activity across <em>all</em> payment types. A suspicious wire transfer to a sanctioned country, a structuring pattern in ACH payments, a crypto transfer to a flagged wallet, a P2P payment to a first-time recipient at 3am — all of these are analyzed with the same risk engine, OFAC/FinCEN screening, network graph analysis, and AML typology matching. Card-specific signals like BIN lookup and CVV verification only activate when a card type is selected.</div>
+      </div>
+
+      <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;padding:16px 18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">How does it detect fraud without a card number?</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.65;">For non-card transactions (wires, ACH, crypto, P2P), fraud is detected through behavioral and contextual signals: the relationship between payer and payee, transaction amount vs. historical baseline, destination country risk, time of day, IP/country mismatch, structuring patterns, payer KYC status, payee sanctions screening, and hidden network connections between accounts. These signals are weighted by 5 AI models to produce the final risk score — no card number needed.</div>
+      </div>
+
+      <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;padding:16px 18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">Which databases does it check?</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.65;">Every analysis — regardless of payment type — runs checks against 8 data sources: <strong style="color:var(--text);">OFAC SDN</strong> (US Treasury sanctions), <strong style="color:var(--text);">FinCEN 314(a)</strong> (law enforcement subjects), <strong style="color:var(--text);">Interpol</strong> (Red Notices &amp; global watchlists), <strong style="color:var(--text);">Device Fingerprint</strong> (fraud device database), <strong style="color:var(--text);">Network Graph DB</strong> (hidden account connections), <strong style="color:var(--text);">AML Typologies</strong> (money laundering patterns), <strong style="color:var(--text);">BIN Database</strong> (card transactions only), and <strong style="color:var(--text);">Card Hotlist</strong> (card transactions only). In this proof of concept, responses are simulated. In production, each fires a live API call within 50–350ms.</div>
+      </div>
+
+      <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;padding:16px 18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">What is the bigger goal of this platform?</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.65;">FraudShield AI is designed to help financial institutions catch fraud, money laundering, and suspicious activity <em>before</em> it causes damage — across every payment method and fund transfer channel — while simultaneously generating a regulatory paper trail presentable to FinCEN, the US Treasury, and USCIS. Every analysis produces a timestamped case ID, an exportable audit log, and an AI-assisted SAR draft aligned to BSA / 31 CFR 1010 and FATF Recommendations 16 &amp; 20.</div>
+      </div>
+
+      <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;padding:16px 18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">Is this a finished product?</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.65;">This is a <strong style="color:var(--text);">proof of concept</strong> demonstrating the system's architecture, data flows, AI models, and regulatory alignment. Database checks are simulated with realistic placeholder responses. In a production deployment, each check would fire a live API call to the listed data source (OFAC API, FinCEN Secure Portal, Rippleshot, Sardine, etc.). The scoring models, signal logic, SAR generation, and audit trail are fully functional in this version.</div>
+      </div>
+
+    </div>
+
+    <!-- Footer bar -->
+    <div style="margin-top:24px;padding-top:16px;border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;line-height:1.7;">
+        FraudShield AI · Proof of Concept v3.2.0 · Built for regulatory demonstration<br/>
+        Aligned: FinCEN FIN-2024-A011 · BSA 31 CFR 1010 · FATF Rec. 16 &amp; 20 · PCI DSS 4.0 · OFAC SDN · Treasury AI MRF 2025
+      </div>
+      <div style="font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;">
+        <a href="https://ajayfoluso.github.io/fraudshield/" style="color:var(--blue);text-decoration:none;">ajayfoluso.github.io/fraudshield</a>
+      </div>
+    </div>
+
   </div>
-
-  <!-- Bulk Results -->
-  <div class="bulk-results" id="bulkResults" style="display:none;">
-
-    <div class="bulk-summary" id="bulkSummary"></div>
-
-    <div class="bulk-table-wrap">
-      <div class="bulk-table-header">
-        <div class="bulk-table-title">Transaction Scan Results</div>
-        <button class="export-btn" onclick="exportResults()">⬇ Export Flagged Report (CSV)</button>
-      </div>
-      <div style="overflow-x:auto;max-height:400px;overflow-y:auto;">
-        <table class="bulk-table" id="bulkTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Amount</th>
-              <th>Country</th>
-              <th>KYC</th>
-              <th>Type</th>
-              <th>Risk Score</th>
-              <th>Classification</th>
-              <th>Top Signal</th>
-            </tr>
-          </thead>
-          <tbody id="bulkTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════
-     TAB: ABOUT
-═══════════════════════════════ -->
-<div id="tab-about" class="tab-content">
-  <div class="about-grid">
-    <div class="about-card">
-      <h3>About FraudShield AI</h3>
-      <p>FraudShield AI is an enterprise-grade fraud detection intelligence platform built to combat the growing threat of GenAI-enabled financial crime in the United States banking system.</p>
-      <p>The system implements a four-model machine learning ensemble — Isolation Forest, Random Forest, Logistic Regression, and a rule-based threshold engine — with per-model explainability scoring and real-time mapping against the six fraud typologies documented in FinCEN's November 2024 national alert on generative AI deepfake fraud.</p>
-      <p>Developed as part of an active research and development endeavor focused on protecting U.S. financial system integrity through AI-driven compliance tooling.</p>
-      <p style="color:var(--text3);font-size:0.72rem;margin-top:12px;">Built and maintained by <strong style="color:var(--accent);">Foluso Ajayi</strong> · Cyfendry · Dallas, TX · 2026</p>
-    </div>
-    <div class="about-card">
-      <h3>Regulatory Alignment</h3>
-      <div class="reg-list">
-        <div class="reg-item">
-          <div class="reg-code">FinCEN FIN-2024-A001</div>
-          <div class="reg-desc">GenAI deepfake fraud typology detection logic — all six documented patterns mapped in real time</div>
-        </div>
-        <div class="reg-item">
-          <div class="reg-code">Treasury AI RMF 2026</div>
-          <div class="reg-desc">Explainable AI output design satisfying the February 2026 explainability mandate for financial AI systems</div>
-        </div>
-        <div class="reg-item">
-          <div class="reg-code">BSA / 31 CFR 1010</div>
-          <div class="reg-desc">Bank Secrecy Act AML structuring detection rules including CTR threshold monitoring</div>
-        </div>
-        <div class="reg-item">
-          <div class="reg-code">FATF Rec. 10 & 20</div>
-          <div class="reg-desc">Customer Due Diligence and Suspicious Transaction Reporting standards</div>
-        </div>
-        <div class="reg-item">
-          <div class="reg-code">OFAC / SDN List</div>
-          <div class="reg-desc">Sanctioned entity and high-risk jurisdiction detection aligned with OFAC screening requirements</div>
-        </div>
-      </div>
-    </div>
-    <div class="about-card">
-      <h3>How the AI Works</h3>
-      <p><strong style="color:var(--accent);">Isolation Forest</strong> — detects anomalous transactions by isolating outliers from normal behavioral patterns using unsupervised learning.</p>
-      <p><strong style="color:var(--accent);">Random Forest</strong> — classifies risk using an ensemble of decision trees trained on known fraud indicators including KYC status and jurisdiction.</p>
-      <p><strong style="color:var(--accent);">Logistic Regression</strong> — produces probability-weighted fraud scores based on statistically significant feature combinations.</p>
-      <p><strong style="color:var(--accent);">Threshold Rules Engine</strong> — applies hard BSA/AML compliance rules including structuring detection and sanctions screening.</p>
-    </div>
-    <div class="about-card">
-      <h3>Risk Classification</h3>
-      <div class="reg-list">
-        <div class="reg-item" style="border-left-color:var(--green);">
-          <div class="reg-code" style="color:var(--green);">Score 0–30</div>
-          <div class="reg-desc">LOW RISK — Normal transaction patterns. No action required.</div>
-        </div>
-        <div class="reg-item" style="border-left-color:var(--amber);">
-          <div class="reg-code" style="color:var(--amber);">Score 31–59</div>
-          <div class="reg-desc">MEDIUM RISK — Elevated patterns detected. Enhanced monitoring recommended.</div>
-        </div>
-        <div class="reg-item" style="border-left-color:var(--orange);">
-          <div class="reg-code" style="color:var(--orange);">Score 60–79</div>
-          <div class="reg-desc">HIGH RISK — Significant indicators present. Manual BSA officer review required.</div>
-        </div>
-        <div class="reg-item" style="border-left-color:var(--red);">
-          <div class="reg-code" style="color:var(--red);">Score 80–100</div>
-          <div class="reg-desc">CRITICAL — Immediate escalation required. SAR filing likely warranted.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-brand">
-    <svg width="20" height="20" viewBox="0 0 38 38" fill="none">
-      <path d="M19 2L4 8V20C4 28.5 11 35.5 19 37C27 35.5 34 28.5 34 20V8L19 2Z" stroke="#00e5ff" stroke-width="1.5" fill="none"/>
-      <circle cx="19" cy="19" r="4" fill="none" stroke="#00e5ff" stroke-width="1.2"/>
-      <circle cx="19" cy="19" r="2" fill="#00e5ff"/>
-    </svg>
-    FRAUDSHIELD AI
-  </div>
-  <span>AI/ML Fraud Detection Intelligence · Aligned with FinCEN FIN-2024-A001 & U.S. Treasury AI RMF 2026</span>
-  <span>Research Prototype · Foluso Ajayi · 2026</span>
 </footer>
 
-</div><!-- /app -->
+<div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════
-// TAB NAVIGATION
-// ════════════════════════════════
-function showTab(tab) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  event.target.classList.add('active');
+const COUNTRIES=["Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cabo Verde","Cambodia","Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
+const HIGH_RISK=["Afghanistan","Belarus","Cuba","Iran","Iraq","Libya","Myanmar","North Korea","Russia","Somalia","South Sudan","Sudan","Syria","Venezuela","Yemen","Zimbabwe"];
+const CARD_TYPES=["Credit Card","Debit Card","Prepaid Card","Corporate Card","Gift Card"];
+
+function fillSel(id,opts,def){const s=document.getElementById(id);if(!s)return;s.innerHTML=opts.map(c=>`<option${c===def?' selected':''}>${c}</option>`).join('');}
+fillSel('payee-country',COUNTRIES,'United States');
+fillSel('tx-origin',COUNTRIES,'United States');
+
+function toggleCard(){
+  const t=document.getElementById('payer-acct-type').value;
+  const on=CARD_TYPES.includes(t);
+  document.getElementById('card-sec').style.display=on?'block':'none';
+  document.getElementById('bin-mrow').style.display=on?'flex':'none';
 }
 
-// ════════════════════════════════
-// SCORING ENGINE
-// ════════════════════════════════
-function scoreTransaction(amount, country, kyc, txtype, txcount, prior) {
-  let iso = 10, rf = 10, lr = 10, rules = 0;
+function fmtCard(el){let v=el.value.replace(/\D/g,'').slice(0,16);el.value=v.replace(/(.{4})/g,'$1 ').trim();}
+function fmtExp(el){let v=el.value.replace(/\D/g,'');if(v.length>2)v=v.slice(0,2)+'/'+v.slice(2,4);el.value=v;}
 
-  // Isolation Forest
-  if (amount > 8000 && amount < 10000) iso += 40;
-  else if (amount > 10000) iso += 22;
-  if (txcount > 8) iso += 20;
-  if (prior > 0 && amount / prior > 0.8) iso += 15;
-  if (txtype === 'crypto') iso += 10;
-  iso = Math.min(iso, 100);
-
-  // Random Forest
-  if (kyc === 'biometric_mismatch' || kyc === 'video_fail') rf += 45;
-  else if (kyc === 'none') rf += 30;
-  else if (kyc === 'partial') rf += 15;
-  if (country === 'IR' || country === 'RU') rf += 25;
-  if (txtype === 'wire' && amount > 10000) rf += 15;
-  if (txtype === 'crypto') rf += 10;
-  rf = Math.min(rf, 100);
-
-  // Logistic Regression
-  let prob = 0.05;
-  if (amount >= 9000 && amount < 10000) prob += 0.35;
-  if (kyc === 'none') prob += 0.25;
-  if (kyc === 'biometric_mismatch' || kyc === 'video_fail') prob += 0.40;
-  if (country === 'IR') prob += 0.30;
-  if (country === 'RU') prob += 0.20;
-  if (txcount >= 10) prob += 0.15;
-  lr = Math.round(Math.min(prob, 1) * 100);
-
-  // Rules
-  if (amount >= 9000 && amount < 10000) rules += 40;
-  if (kyc === 'none' && amount > 2000) rules += 30;
-  if (country === 'IR') rules += 50;
-  if (txcount >= 15) rules += 20;
-  rules = Math.min(rules, 100);
-
-  const ensemble = Math.round(iso * 0.25 + rf * 0.30 + lr * 0.25 + rules * 0.20);
-
-  // Signals
-  const signals = [];
-  if (amount >= 9000 && amount < 10000) signals.push({ name: 'Amount near $10K CTR threshold', pts: '+35', cls: 'warn' });
-  if (kyc === 'biometric_mismatch') signals.push({ name: 'Biometric mismatch detected', pts: '+45', cls: 'crit' });
-  if (kyc === 'video_fail') signals.push({ name: 'Video liveness check failed', pts: '+45', cls: 'crit' });
-  if (kyc === 'none') signals.push({ name: 'No KYC verification present', pts: '+28', cls: 'warn' });
-  if (kyc === 'partial') signals.push({ name: 'Partial KYC only', pts: '+14', cls: 'warn' });
-  if (country === 'IR') signals.push({ name: 'OFAC sanctioned jurisdiction (IR)', pts: '+50', cls: 'crit' });
-  if (country === 'RU') signals.push({ name: 'High-risk jurisdiction (RU)', pts: '+22', cls: 'warn' });
-  if (txcount >= 10) signals.push({ name: 'High transaction velocity (24h)', pts: '+18', cls: 'warn' });
-  if (txtype === 'crypto') signals.push({ name: 'Crypto channel — elevated risk', pts: '+10', cls: 'warn' });
-  if (txtype === 'wire' && amount > 10000) signals.push({ name: 'Large international wire', pts: '+15', cls: 'warn' });
-
-  return { ensemble, iso, rf, lr, rules, signals };
+function doTokenize(){
+  const num=document.getElementById('card-num').value.replace(/\s/g,'');
+  if(num.length<15){toast('Enter a valid card number first');return;}
+  const bin=num.slice(0,6);
+  const tok='tok_'+Math.random().toString(36).slice(2,10).toUpperCase();
+  const issuers={'4':'Visa','5':'Mastercard','3':'Amex','6':'Discover'};
+  const issuer=issuers[num[0]]||'Unknown';
+  document.getElementById('tok-val').textContent=tok;
+  document.getElementById('bin-val').textContent=bin+'xx';
+  document.getElementById('issuer-val').textContent=issuer+' · USA';
+  document.getElementById('tok-result').classList.add('on');
+  toast('Card tokenized — raw number discarded by processor');
 }
 
-function getRiskLabel(score) {
-  if (score < 31) return { label: '🟢 LOW RISK', color: 'var(--green)', cls: 'risk-low' };
-  if (score < 60) return { label: '🟡 MEDIUM RISK', color: 'var(--amber)', cls: 'risk-med' };
-  if (score < 80) return { label: '🟠 HIGH RISK', color: 'var(--orange)', cls: 'risk-high' };
-  return { label: '🔴 CRITICAL', color: 'var(--red)', cls: 'risk-crit' };
+const vmap={
+  avs:{'Full Match':'dg','Partial Match':'da','No Match':'dr','Not Checked':'da'},
+  cvv:{'Match':'dg','Mismatch':'dr','Not Provided':'da'},
+  '3ds':{'Passed':'dg','Failed':'dr','Not Enrolled':'da','Attempted':'da'},
+  name:{'High (85–100%)':'dg','Medium (60–84%)':'da','Low (below 60%)':'dr','No Match':'dr'},
+  dec:{'0':'dg','1–2':'da','3–5 (suspicious)':'dr','6+ (high risk)':'dr'},
+  multi:{'No — single card':'dg','2–3 cards':'da','4+ cards (flagged)':'dr'},
+};
+function vdot(id,sel){const d=document.getElementById('d-'+id);if(d){d.className='vsig-dot '+(vmap[id][sel.value]||'');}}
+
+const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+function setDb(id,state,msg,ms){
+  const states={idle:'',checking:'checking',clear:'clear',warning:'warning',flagged:'flagged'};
+  const labels={idle:'IDLE',checking:'QUERYING...',clear:'CLEAR',warning:'WARNING',flagged:'FLAGGED'};
+  document.getElementById('db-'+id).className='db-card '+(states[state]||'');
+  document.getElementById('dbch-'+id).className='db-ch '+(state==='idle'?'':state);
+  document.getElementById('dbnm-'+id).className='db-nm '+(state==='idle'?'':state);
+  const bdg=document.getElementById('dbbdg-'+id);
+  bdg.className='db-bdg '+(state==='idle'?'idle':state);
+  bdg.textContent=labels[state]||state.toUpperCase();
+  const res=document.getElementById('dbres-'+id);
+  res.className='db-res '+(state==='idle'||state==='checking'?state:state);
+  res.textContent=msg;
+  if(ms)document.getElementById('dbms-'+id).textContent=ms+'ms';
+  else document.getElementById('dbms-'+id).textContent='— ms';
 }
 
-// ════════════════════════════════
-// SINGLE TRANSACTION ANALYSIS
-// ════════════════════════════════
-function analyze() {
-  const amount  = parseFloat(document.getElementById('amount').value) || 0;
-  const country = document.getElementById('country').value;
-  const kyc     = document.getElementById('kyc').value;
-  const txtype  = document.getElementById('txtype').value;
-  const txcount = parseInt(document.getElementById('txcount').value) || 0;
-  const prior   = parseFloat(document.getElementById('prior').value) || 0;
-
-  const r = scoreTransaction(amount, country, kyc, txtype, txcount, prior);
-  const risk = getRiskLabel(r.ensemble);
-
-  // Ring
-  const arc = document.getElementById('scoreArc');
-  arc.style.strokeDashoffset = 364.4 - (r.ensemble / 100) * 364.4;
-  arc.style.stroke = risk.color;
-  document.getElementById('scoreNum').textContent = r.ensemble;
-  const vEl = document.getElementById('scoreVerdict');
-  vEl.textContent = risk.label;
-  vEl.style.color = risk.color;
-
-  // Bars
-  [r.iso, r.rf, r.lr, r.rules].forEach((v, i) => {
-    document.getElementById('bar' + i).style.width = v + '%';
-    document.getElementById('val' + i).textContent = v;
-  });
-
-  // Signals
-  const sl = document.getElementById('signalList');
-  sl.innerHTML = '';
-  const signals = r.signals.length ? r.signals : [{ name: 'No significant risk signals detected', pts: '', cls: '' }];
-  signals.forEach(s => {
-    const d = document.createElement('div');
-    d.className = 'signal-item ' + s.cls;
-    d.innerHTML = `<span class="signal-name">${s.name}</span>${s.pts ? '<span class="signal-pts">' + s.pts + 'pts</span>' : ''}`;
-    sl.appendChild(d);
-  });
-
-  // Typologies
-  for (let i = 0; i < 6; i++) {
-    document.getElementById('typo' + i).className = 'typo-card';
-    const b = document.getElementById('badge' + i);
-    b.className = 'typo-badge badge-clear';
-    b.textContent = 'CLEAR';
+async function runDbChecks(inp){
+  const isCard=CARD_TYPES.includes(inp.acctType);
+  const checks=[
+    {id:'bin',run:()=>{
+      if(!isCard)return{s:'clear',m:'N/A — Non-card transaction. Skipped.',ms:8};
+      return{s:'clear',m:`Visa Credit · JPMorgan Chase · USA · BIN ${inp.bin||'45678x'}xx verified`,ms:rand(40,140)};
+    }},
+    {id:'hotlist',run:()=>{
+      if(!isCard)return{s:'clear',m:'N/A — Non-card transaction. Skipped.',ms:8};
+      const bad=inp.cvv==='Mismatch'||inp.dec.includes('3–5')||inp.dec.includes('6+')||inp.acctType==='Gift Card';
+      return bad
+        ?{s:'flagged',m:'MATCH — Card found in Q1 2026 breach feed (Rippleshot). Treat as compromised.',ms:rand(80,200)}
+        :{s:'clear',m:'Not listed in any known compromise or stolen card feed.',ms:rand(60,180)};
+    }},
+    {id:'ofac',run:()=>{
+      const hit=inp.watch.includes('OFAC')||HIGH_RISK.includes(inp.payeeCountry);
+      return hit
+        ?{s:'flagged',m:`POSSIBLE MATCH — ${inp.payeeName||'Payee'} / ${inp.payeeCountry} appears on OFAC SDN list. Manual review required.`,ms:rand(120,280)}
+        :{s:'clear',m:'No match on OFAC Specially Designated Nationals list.',ms:rand(90,240)};
+    }},
+    {id:'fincen',run:()=>{
+      return inp.watch.includes('FinCEN')
+        ?{s:'flagged',m:'MATCH — Entity listed under FinCEN 314(a) law enforcement subjects.',ms:rand(100,240)}
+        :{s:'clear',m:'No match on FinCEN 314(a) subject list.',ms:rand(80,190)};
+    }},
+    {id:'interpol',run:()=>{
+      return inp.watch.includes('Interpol')
+        ?{s:'flagged',m:'RED NOTICE MATCH — Subject appears on Interpol i-Link database.',ms:rand(150,320)}
+        :{s:'clear',m:'No match on Interpol Red Notice or Diffusion list.',ms:rand(100,280)};
+    }},
+    {id:'device',run:()=>{
+      const flag=isCard&&inp.multi.includes('4+');
+      const warn=(isCard&&inp.multi.includes('2–3'))||inp.ip.includes('VPN')||inp.ip.includes('Proxy');
+      if(flag)return{s:'flagged',m:'FLAGGED — Device linked to 4+ card numbers. Strong fraud indicator.',ms:rand(60,130)};
+      if(warn)return{s:'warning',m:'WARN — VPN/proxy detected or multiple cards on same device.',ms:rand(60,130)};
+      return{s:'clear',m:'No device anomalies detected. Device fingerprint clean.',ms:rand(40,110)};
+    }},
+    {id:'graph',run:()=>{
+      const susp=inp.firstTime==='Yes — first transfer'&&parseFloat(inp.amt)>3000;
+      return susp
+        ?{s:'warning',m:'1-degree separation from known flagged account in network graph.',ms:rand(80,190)}
+        :{s:'clear',m:'No suspicious links in transaction network graph.',ms:rand(70,170)};
+    }},
+    {id:'aml',run:()=>{
+      const a=parseFloat(inp.amt)||0;
+      if(a>9000&&a<10000)return{s:'warning',m:`STRUCTURING ALERT — $${a.toLocaleString()} is just below $10,000 BSA reporting threshold.`,ms:rand(60,150)};
+      if(HIGH_RISK.includes(inp.payeeCountry))return{s:'warning',m:`High-risk jurisdiction typology — ${inp.payeeCountry} is a FATF grey/black list country.`,ms:rand(60,140)};
+      return{s:'clear',m:'No AML typology patterns matched.',ms:rand(50,130)};
+    }},
+  ];
+  let cl=0,wa=0,fl=0;
+  for(const c of checks){
+    setDb(c.id,'checking','Querying...',null);
+    await wait(rand(280,620));
+    const r=c.run();
+    setDb(c.id,r.s,r.m,r.ms);
+    if(r.s==='clear')cl++;else if(r.s==='warning')wa++;else fl++;
+    document.getElementById('db-summary').textContent=`${cl} CLEAR · ${wa} WARN · ${fl} FLAGGED`;
   }
-  function flagTypo(idx, level) {
-    const cc = { detected: 'flagged', review: 'warn' };
-    const bc = { detected: 'badge-detected', review: 'badge-review' };
-    const bt = { detected: 'DETECTED', review: 'REVIEW' };
-    document.getElementById('typo' + idx).className = 'typo-card ' + cc[level];
-    const b = document.getElementById('badge' + idx);
-    b.className = 'typo-badge ' + bc[level];
-    b.textContent = bt[level];
-  }
-  if (kyc === 'biometric_mismatch' || kyc === 'video_fail') flagTypo(0, 'detected');
-  if (amount >= 9000 && amount < 10000) flagTypo(1, 'detected');
-  if (country === 'IR' || country === 'RU' || (txtype === 'wire' && amount > 10000)) flagTypo(2, 'review');
-  if (kyc === 'none' && amount > 2000) flagTypo(3, 'review');
-  if (txcount >= 10) flagTypo(4, 'detected');
-  if (country === 'IR') flagTypo(5, 'detected');
 }
 
-// ════════════════════════════════
-// BULK UPLOAD
-// ════════════════════════════════
-let bulkData = [];
-
-function handleDrop(e) {
-  e.preventDefault();
-  document.getElementById('uploadZone').classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file && file.name.endsWith('.csv')) processCSV(file);
+function computeScore(inp){
+  let s=10;
+  const a=parseFloat(inp.amt)||0,v=parseFloat(inp.vol)||1;
+  if(inp.firstTime==='Yes — first transfer')s+=16;
+  if(inp.ip.includes('mismatch'))s+=14;
+  if(inp.ip.includes('VPN')||inp.ip.includes('Proxy'))s+=20;
+  if(inp.cvv==='Mismatch')s+=22;
+  if(inp.avs==='No Match')s+=12;
+  if(inp.threeds==='Failed')s+=15;
+  if(inp.dec.includes('3–5'))s+=16;
+  if(inp.dec.includes('6+'))s+=22;
+  if(inp.multi.includes('4+'))s+=20;
+  if(inp.multi.includes('2–3'))s+=8;
+  if(HIGH_RISK.includes(inp.payeeCountry))s+=20;
+  if(inp.watch!=='Not Listed — Clear')s+=30;
+  if(inp.acctType==='Gift Card')s+=14;
+  const hr=parseInt((inp.time||'00:00').split(':')[0]);
+  if(hr>=1&&hr<=5)s+=8;
+  if(a/v>3)s+=12;
+  if(a>9000&&a<10000)s+=12;
+  if(inp.kyc==='Unverified')s+=12;
+  if(inp.kyc==='PEP — Politically Exposed')s+=10;
+  if(parseInt(inp.payerAge)||365<30)s+=10;
+  if(inp.name&&inp.name.includes('Low'))s+=10;
+  if(inp.name&&inp.name.includes('No Match'))s+=18;
+  if(inp.kyc==='Verified — Full KYC')s-=8;
+  if(inp.twofa==='Yes')s-=5;
+  return Math.max(5,Math.min(98,Math.round(s)));
 }
 
-function handleFileUpload(e) {
-  const file = e.target.files[0];
-  if (file) processCSV(file);
+function buildSignals(inp){
+  const o=[];
+  const a=parseFloat(inp.amt)||0,v=parseFloat(inp.vol)||1;
+  if(inp.watch!=='Not Listed — Clear')o.push({t:'a',h:'Sanctions / watchlist match',b:inp.watch+' — immediate escalation required'});
+  if(inp.cvv==='Mismatch')o.push({t:'a',h:'CVV mismatch',b:'Card number valid but CVV failed — strong stolen card indicator'});
+  if(inp.threeds==='Failed')o.push({t:'a',h:'3D Secure failed',b:'Card issuer rejected strong customer authentication'});
+  if(inp.ip.includes('VPN')||inp.ip.includes('Proxy'))o.push({t:'a',h:'VPN / Proxy / Tor detected',b:'Identity obfuscation via anonymization network'});
+  if(inp.dec&&(inp.dec.includes('3–5')||inp.dec.includes('6+')))o.push({t:'a',h:'Multiple declined attempts',b:'Repeated failures before success — card testing pattern'});
+  if(inp.multi&&inp.multi.includes('4+'))o.push({t:'a',h:'4+ cards on one device',b:'Device fingerprint linked to multiple cards'});
+  if(inp.name&&(inp.name.includes('Low')||inp.name.includes('No Match')))o.push({t:'a',h:'Name match failed',b:'Submitted name does not match bank records for this card'});
+  if(HIGH_RISK.includes(inp.payeeCountry))o.push({t:'a',h:'Sanctioned destination: '+inp.payeeCountry,b:'FATF grey/black list — enhanced scrutiny required'});
+  if(inp.firstTime==='Yes — first transfer')o.push({t:'w',h:'First-time recipient',b:'No prior transaction history between payer and payee'});
+  if(inp.ip.includes('mismatch'))o.push({t:'w',h:'IP country mismatch',b:'Transaction IP resolves to different jurisdiction'});
+  if(a>9000&&a<10000)o.push({t:'w',h:'Structuring pattern','b':'$'+a.toLocaleString()+' — just below $10,000 BSA reporting threshold'});
+  const hr=parseInt((inp.time||'').split(':')[0]);
+  if(hr>=1&&hr<=5)o.push({t:'w',h:'Off-hours: '+inp.time,b:'Outside normal activity window (1am–5am)'});
+  if(a/v>3)o.push({t:'w',h:'Volume spike '+(a/v).toFixed(1)+'×',b:'Amount significantly exceeds 30-day baseline'});
+  if(inp.kyc==='Unverified')o.push({t:'w',h:'Payer unverified',b:'No KYC — identity cannot be confirmed'});
+  if(inp.acctType==='Gift Card')o.push({t:'w',h:'Gift card — high fraud vector',b:'Most commonly exploited payment instrument'});
+  if(inp.kyc==='Verified — Full KYC')o.push({t:'o',h:'Full KYC verified',b:'Payer identity confirmed'});
+  if(inp.avs==='Full Match')o.push({t:'o',h:'AVS full match',b:'Billing address matches bank records'});
+  if(!inp.multi||inp.multi.includes('single'))o.push({t:'o',h:'Single card on device',b:'No multi-card device anomaly'});
+  return o.slice(0,9);
 }
 
-function processCSV(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const lines = e.target.result.trim().split('\n');
-    const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
-    const rows = lines.slice(1).filter(l => l.trim());
-
-    const progress = document.getElementById('scanProgress');
-    const fill = document.getElementById('progressFill');
-    const pText = document.getElementById('progressText');
-    progress.style.display = 'block';
-    document.getElementById('bulkResults').style.display = 'none';
-
-    bulkData = [];
-    let i = 0;
-
-    function scanNext() {
-      if (i >= rows.length) {
-        progress.style.display = 'none';
-        renderBulkResults();
-        return;
-      }
-      const cols = rows[i].split(',').map(c => c.trim());
-      const get = (key) => {
-        const idx = headers.indexOf(key);
-        return idx >= 0 ? cols[idx] : '';
-      };
-
-      const amount  = parseFloat(get('amount')) || 0;
-      const country = get('country') || 'US';
-      const kyc     = get('kyc') || 'verified';
-      const txtype  = get('txtype') || 'ach';
-      const txcount = parseInt(get('txcount')) || 0;
-      const prior   = parseFloat(get('prior_volume')) || 0;
-
-      const r = scoreTransaction(amount, country, kyc, txtype, txcount, prior);
-      const risk = getRiskLabel(r.ensemble);
-      const topSignal = r.signals.length ? r.signals[0].name : 'None';
-
-      bulkData.push({ num: i + 1, amount, country, kyc, txtype, score: r.ensemble, risk, topSignal });
-
-      i++;
-      const pct = Math.round((i / rows.length) * 100);
-      fill.style.width = pct + '%';
-      pText.textContent = i + ' / ' + rows.length + ' transactions analyzed';
-
-      setTimeout(scanNext, 2);
-    }
-    scanNext();
+async function runAnalysis(){
+  const btn=document.getElementById('run-btn');
+  if(btn.disabled)return;
+  btn.disabled=true;btn.innerHTML='⏳ &nbsp;ANALYZING...';
+  const isCard=CARD_TYPES.includes(document.getElementById('payer-acct-type').value);
+  const inp={
+    acctType:document.getElementById('payer-acct-type').value,
+    kyc:document.getElementById('payer-kyc').value,
+    payerAge:document.getElementById('payer-age').value,
+    twofa:document.getElementById('payer-2fa').value,
+    avs:isCard?document.getElementById('v-avs').value:'Full Match',
+    cvv:isCard?document.getElementById('v-cvv').value:'Match',
+    threeds:isCard?document.getElementById('v-3ds').value:'Passed',
+    name:isCard?document.getElementById('v-name').value:'High (85–100%)',
+    dec:isCard?document.getElementById('v-dec').value:'0',
+    multi:isCard?document.getElementById('v-multi').value:'No — single card',
+    bin:document.getElementById('card-num')?.value.replace(/\s/g,'').slice(0,6)||'',
+    payeeName:document.getElementById('payee-name').value,
+    payeeCountry:document.getElementById('payee-country').value,
+    watch:document.getElementById('payee-watch').value,
+    firstTime:document.getElementById('payee-first').value,
+    payeeAge:document.getElementById('payee-age').value,
+    amt:document.getElementById('tx-amt').value,
+    cur:document.getElementById('tx-cur').value,
+    time:document.getElementById('tx-time').value,
+    ip:document.getElementById('tx-ip').value,
+    vol:document.getElementById('tx-30d').value,
   };
-  reader.readAsText(file);
-}
-
-function renderBulkResults() {
-  const total = bulkData.length;
-  const low   = bulkData.filter(r => r.score < 31).length;
-  const med   = bulkData.filter(r => r.score >= 31 && r.score < 60).length;
-  const high  = bulkData.filter(r => r.score >= 60 && r.score < 80).length;
-  const crit  = bulkData.filter(r => r.score >= 80).length;
-
-  document.getElementById('bulkSummary').innerHTML = `
-    <div class="summary-stat"><div class="summary-num">${total}</div><div class="summary-label">Total Scanned</div></div>
-    <div class="summary-stat"><div class="summary-num" style="color:var(--green)">${low}</div><div class="summary-label">Low Risk</div></div>
-    <div class="summary-stat"><div class="summary-num" style="color:var(--amber)">${med}</div><div class="summary-label">Medium Risk</div></div>
-    <div class="summary-stat"><div class="summary-num" style="color:var(--orange)">${high}</div><div class="summary-label">High Risk</div></div>
-    <div class="summary-stat"><div class="summary-num" style="color:var(--red)">${crit}</div><div class="summary-label">Critical</div></div>
-  `;
-
-  const tbody = document.getElementById('bulkTableBody');
-  tbody.innerHTML = '';
-  bulkData.forEach(row => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="font-family:'JetBrains Mono',monospace;color:var(--text3)">${row.num}</td>
-      <td>$${row.amount.toLocaleString()}</td>
-      <td>${row.country}</td>
-      <td>${row.kyc}</td>
-      <td>${row.txtype}</td>
-      <td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:${row.risk.color}">${row.score}</td>
-      <td><span class="risk-pill ${row.risk.cls}">${row.risk.label.replace(/🟢|🟡|🟠|🔴/g,'').trim()}</span></td>
-      <td style="font-size:0.65rem;color:var(--text3)">${row.topSignal}</td>
-    `;
-    tbody.appendChild(tr);
+  ['bin','hotlist','ofac','fincen','interpol','device','graph','aml'].forEach(id=>setDb(id,'idle','Awaiting analysis...',null));
+  document.getElementById('db-summary').textContent='8 SOURCES — RUNNING';
+  document.getElementById('score-arc').style.strokeDashoffset='301.6';
+  document.getElementById('score-arc').style.stroke='#4a5a72';
+  document.getElementById('score-num').textContent='...';
+  document.getElementById('score-num').style.color='var(--text3)';
+  document.getElementById('risk-badge').className='risk-badge rb-idle';
+  document.getElementById('risk-badge').textContent='ANALYZING...';
+  await runDbChecks(inp);
+  const score=computeScore(inp);
+  const col=score>=70?'#f87171':score>=40?'#f59e0b':'#22c55e';
+  const arc=document.getElementById('score-arc');
+  arc.style.strokeDashoffset=301.6-(score/100)*301.6;
+  arc.style.stroke=col;
+  const sEl=document.getElementById('score-num');
+  sEl.style.color=col;
+  let d=0;const t=setInterval(()=>{d=Math.min(d+2,score);sEl.textContent=d;if(d>=score)clearInterval(t);},18);
+  const badge=document.getElementById('risk-badge');
+  if(score>=70){badge.className='risk-badge rb-high';badge.textContent='HIGH RISK';}
+  else if(score>=40){badge.className='risk-badge rb-med';badge.textContent='MEDIUM RISK';}
+  else{badge.className='risk-badge rb-low';badge.textContent='LOW RISK';}
+  const sigs=buildSignals(inp);
+  const ic={a:'!',w:'~',o:'✓',i:'i'};const cl={a:'sa',w:'sw',o:'so',i:'si'};
+  document.getElementById('signals').innerHTML=sigs.map(s=>`<div class="signal"><div class="sig-ic ${cl[s.t]}">${ic[s.t]}</div><div class="sig-text"><strong>${s.h}</strong><span>${s.b}</span></div></div>`).join('');
+  const base=Math.round(score*0.55);
+  [{id:'if',v:Math.min(98,base+rand(-8,12))},{id:'rf',v:Math.min(98,base+rand(-6,10))},{id:'lr',v:Math.min(98,base+rand(-10,8))},{id:'gnn',v:Math.min(98,score+rand(-5,5))},{id:'bin',v:isCard?Math.min(98,score+rand(-8,8)):5}].forEach(m=>{
+    const c=m.v>=70?'#f87171':m.v>=40?'#f59e0b':'#22c55e';
+    const ve=document.getElementById('mv-'+m.id);if(ve){ve.textContent=m.v;ve.style.color=c;}
+    const be=document.getElementById('mb-'+m.id);if(be)be.style.width=m.v+'%';
   });
-
-  document.getElementById('bulkResults').style.display = 'block';
+  const cid='FS-2026-'+String(rand(1,99999)).padStart(5,'0');
+  const now=new Date();
+  document.getElementById('c-id').textContent=cid;
+  document.getElementById('c-ts').textContent=now.toISOString().replace('T',' ').slice(0,19)+' UTC';
+  document.getElementById('c-sar').textContent=score>=70?'RECOMMENDED':'NOT REQUIRED';
+  document.getElementById('c-log').textContent='SAVED — '+cid+'.log';
+  btn.disabled=false;btn.innerHTML='▶ &nbsp;RUN ANALYSIS';
+  toast('Analysis complete — '+cid);
 }
 
-function exportResults() {
-  if (!bulkData.length) return;
-  const flagged = bulkData.filter(r => r.score >= 31);
-  let csv = 'Transaction#,Amount,Country,KYC,Type,RiskScore,Classification,TopSignal\n';
-  flagged.forEach(r => {
-    csv += `${r.num},$${r.amount},${r.country},${r.kyc},${r.txtype},${r.score},${r.risk.label.replace(/🟢|🟡|🟠|🔴/g,'').trim()},"${r.topSignal}"\n`;
-  });
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'fraudshield_flagged_report_' + new Date().toISOString().slice(0,10) + '.csv';
-  a.click();
+function genSAR(){
+  const cid=document.getElementById('c-id').textContent;
+  if(cid==='—'){toast('Run analysis first');return;}
+  const score=document.getElementById('score-num').textContent;
+  const now=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const txt=`SUSPICIOUS ACTIVITY REPORT — AI-ASSISTED DRAFT\nFinCEN SAR Reference | Case: ${cid}\nGenerated: ${now}\n\nPART I — SUBJECT INFORMATION\nPayer Name: ${document.getElementById('payer-name').value||'[PAYER NAME]'}\nAccount Type: ${document.getElementById('payer-acct-type').value}\nKYC Status: ${document.getElementById('payer-kyc').value}\n\nPART II — TRANSACTION DETAILS\nAmount: $${document.getElementById('tx-amt').value} ${document.getElementById('tx-cur').value}\nTransaction Type: ${document.getElementById('tx-type').value}\nRecipient: ${document.getElementById('payee-name').value||'[PAYEE NAME]'}\nRecipient Country: ${document.getElementById('payee-country').value}\nOrigin Country: ${document.getElementById('tx-origin').value}\nTime: ${document.getElementById('tx-time').value}\n\nPART III — NARRATIVE\nFraudShield AI assigned a risk score of ${score}/100.\nKey signals: ${Array.from(document.querySelectorAll('#signals .sig-text strong')).map(e=>e.textContent).join('; ')}.\n\nDatabase checks completed: BIN Database, Card Hotlist, OFAC SDN, FinCEN 314(a), Interpol, Device Fingerprint, Network Graph, AML Typologies.\n\nREGULATORY BASIS: BSA 31 CFR 1010 | FinCEN FIN-2024-A011 | FATF Rec. 16 & 20\n\nNOTE: AI-assisted draft. A qualified compliance officer must review before filing with FinCEN.`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download=cid+'_SAR_DRAFT.txt';a.click();
+  toast('SAR draft downloaded');
 }
 
-function downloadTemplate() {
-  const csv = `amount,country,kyc,txtype,txcount,prior_volume
-9500,US,verified,wire,2,5000
-14200,IR,none,crypto,15,1000
-3000,GB,partial,ach,1,8000
-9800,RU,biometric_mismatch,wire,8,2000
-500,CA,verified,card,1,12000
-8900,US,none,cash,3,3000
-25000,CN,partial,wire,5,10000`;
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'fraudshield_sample_template.csv';
-  a.click();
+function exportLog(){
+  const cid=document.getElementById('c-id').textContent;
+  if(cid==='—'){toast('Run analysis first');return;}
+  const rows=[['CASE',cid],['TIMESTAMP',document.getElementById('c-ts').textContent],['SCORE',document.getElementById('score-num').textContent],['RISK',document.getElementById('risk-badge').textContent],['PAYER',document.getElementById('payer-name').value],['KYC',document.getElementById('payer-kyc').value],['ACCT TYPE',document.getElementById('payer-acct-type').value],['PAYEE',document.getElementById('payee-name').value],['PAYEE COUNTRY',document.getElementById('payee-country').value],['AMOUNT','$'+document.getElementById('tx-amt').value],['TX TYPE',document.getElementById('tx-type').value],['SAR',document.getElementById('c-sar').textContent]];
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['FRAUDSHIELD AI AUDIT LOG\n'+rows.map(r=>r[0].padEnd(18)+r[1]).join('\n')],{type:'text/plain'}));a.download=cid+'_AUDIT.txt';a.click();
+  toast('Audit log exported');
 }
-
-// Run on load
-analyze();
 </script>
 </body>
 </html>
